@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: project-y-db
+    environment:
+      POSTGRES_DB: project-y
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/data/postgres
+
+volumes:
+  postgres:
