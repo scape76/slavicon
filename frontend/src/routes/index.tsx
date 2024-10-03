@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import BlurFade from "@/components/ui/blur-fade";
 import { FadeText } from "@/components/ui/fade-text";
-
 export const Route = createFileRoute("/")({
   component: HomeComponent,
 });
@@ -32,10 +31,18 @@ function HomeComponent() {
           to="/collection"
           className="text-muted-foreground hover:text-accent-foreground font-bold focus:text-accent-foreground transition-colors duration-300 active:text-accent-foreground  text-xl flex flex-col uppercase"
         >
-          <FadeText direction="left" transition={{ delay: 0.8, duration: 0.4 }} framerProps={{}}>
+          <FadeText
+            direction="left"
+            transition={{ delay: 0.8, duration: 0.4 }}
+            framerProps={{}}
+          >
             Find out
           </FadeText>
-          <FadeText direction="left" transition={{ delay: 0.8, duration: 0.4 }} framerProps={{}}>
+          <FadeText
+            direction="left"
+            transition={{ delay: 0.8, duration: 0.4 }}
+            framerProps={{}}
+          >
             <span className="flex items-center">
               more <ArrowRight className="size-4 ml-2" />
             </span>

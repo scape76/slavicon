@@ -8,6 +8,13 @@
       "when": 1727962077501,
       "tag": "0000_quiet_mindworm",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727976500195,
+      "tag": "0001_fixed_smasher",
+      "breakpoints": true
     }
   ]
 }
