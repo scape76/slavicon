@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { buttonVariants } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   return (
@@ -8,7 +10,12 @@ export function Header() {
       </Link>
       <Link
         to={"/api/auth/google" as any}
-        className="text-sm sm:text-base font-medium"
+        className={cn(
+          buttonVariants({
+            variant: "link",
+            className: "text-sm sm:text-base font-medium text-foreground",
+          })
+        )}
       >
         Sign in
       </Link>
