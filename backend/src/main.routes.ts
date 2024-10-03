@@ -9,8 +9,6 @@ const cors = new CORS({
   appendHeaders: true,
 });
 
-const PORT = process.env.PORT || 3001;
-
 export default routes()
   .use(cors)
   .get("/chats", () => {
