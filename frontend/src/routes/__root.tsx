@@ -1,18 +1,13 @@
 import { Header } from "@/components/header";
+import { LoaderData } from "@/types";
 import { Link, Outlet, createRootRoute, defer } from "@tanstack/react-router";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import ky from "ky";
-
 // will need to sync types with backend
-type LoaderData = {
-  session: any;
-  user: {
-    id: string;
-    email: string;
-    image: string | null;
-    username: string | null;
-  };
-};
+
+const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   loader: () => {
@@ -22,15 +17,17 @@ export const Route = createRootRoute({
       userPromise: defer(userPromise),
     };
   },
+  // never revalidate (basically infinite cache time)
+  staleTime: Infinity,
   component: RootComponent,
 });
 
 function RootComponent() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Header />
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
-    </>
+    </QueryClientProvider>
   );
 }

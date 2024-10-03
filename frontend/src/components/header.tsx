@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Route } from "../routes/__root";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2 } from "lucide-react";
+import { UserMenu } from "./user-menu";
 
 export function Header() {
   const { userPromise } = Route.useLoaderData();
@@ -15,19 +17,17 @@ export function Header() {
       </Link>
       <Await
         promise={userPromise}
-        fallback={<div className="animate-pulse">Loading...</div>}
+        fallback={
+          <Avatar>
+            <AvatarFallback>
+              <Loader2 className="animate-spin" />
+            </AvatarFallback>
+          </Avatar>
+        }
       >
         {function (data) {
-          if (data) {
-            return (
-              <Avatar>
-                <AvatarImage
-                  src={data.user.image ?? "/placeholder.svg"}
-                  alt={data.user.username ?? ""}
-                />
-                <AvatarFallback>{data.user.username?.[0]}</AvatarFallback>
-              </Avatar>
-            );
+          if (data.user) {
+            return <UserMenu user={data.user} />;
           }
 
           return (

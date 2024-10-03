@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import BlurFade from "@/components/ui/blur-fade";
 import { FadeText } from "@/components/ui/fade-text";
+
 export const Route = createFileRoute("/")({
   component: HomeComponent,
 });

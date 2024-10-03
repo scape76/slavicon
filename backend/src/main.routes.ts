@@ -51,7 +51,8 @@ export default routes()
     const sessionId = cookies.get(lucia.sessionCookieName) ?? null;
 
     if (!sessionId) {
-      return new Response(null, { status: 401 });
+      // return success but just no session
+      return new Response(null, { status: 200 });
     }
 
     const result = await lucia.validateSession(sessionId);
@@ -197,4 +198,22 @@ export default routes()
       }
       return new Response(null, { status: 500 });
     }
+  })
+  .post("/logout", async (ctx) => {
+    const cookies = parseCookies(ctx.req.headers.get("Cookie") ?? "");
+    const sessionId = cookies.get(lucia.sessionCookieName) ?? null;
+
+    if (!sessionId) {
+      return new Response(null, { status: 401 });
+    }
+
+    await lucia.invalidateSession(sessionId);
+    const sessionCookie = lucia.createBlankSessionCookie();
+
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Set-Cookie": sessionCookie.serialize(),
+      },
+    });
   });
