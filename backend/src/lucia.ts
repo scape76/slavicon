@@ -8,8 +8,6 @@ const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
 export const GOOGLE_AUTH_CALLBACK_URL = `${process.env.BASE_URL}/auth/google/callback`;
 
-console.log(GOOGLE_AUTH_CALLBACK_URL);
-
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     expires: false,

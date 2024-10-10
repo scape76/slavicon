@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
+    "finetune": "bun --env-file=.env fine-tuning/index.ts",
     "dev": "bun run --watch index.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
@@ -23,6 +24,7 @@
     "arctic": "^1.9.2",
     "drizzle-orm": "^0.33.0",
     "lucia": "^3.2.0",
+    "openai": "^4.67.3",
     "oslo": "^1.2.1",
     "pg": "^8.13.0"
   }

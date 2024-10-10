@@ -9,3 +9,7 @@ export type LoaderData = {
   session: any;
   user: User;
 };
+
+export type Result<D> = {
+  data: D;
+};

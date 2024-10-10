@@ -12,6 +12,7 @@ import { db } from "./db";
 import { users } from "./db/schema";
 import { generateIdFromEntropySize } from "lucia";
 import { eq } from "drizzle-orm";
+import { getChat, getUserChats } from "./use-cases/chats";
 
 const cors = new CORS({
   allowMethods: ["GET", "POST", "PUT", "DELETE"],
@@ -22,40 +23,45 @@ const cors = new CORS({
 
 export default routes()
   .use(cors)
-  .get("/chats", () => {
-    const chats = [
-      {
-        id: "1",
-        name: "Chat 1",
-      },
-      {
-        id: "2",
-        name: "Chat 2",
-      },
-    ];
+  .get("/chats", async (ctx) => {
+    const result = await validateSession(ctx.req);
 
-    return json(chats);
-  })
-  .get("/chats/:id", (ctx) => {
-    if (Number(ctx.params.id) > 2) {
-      return new Response(null, { status: 404 });
+    if (!result?.user) {
+      return json({
+        data: [],
+      });
     }
 
+    const chats = await getUserChats(result.user.id);
+
     return json({
-      name: `Chat ${ctx.params.id}`,
-      id: ctx.params.id,
+      data: chats,
+    });
+  })
+  .get("/chats/:id", async (ctx) => {
+    const result = await validateSession(ctx.req);
+
+    if (!result?.user) {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: process.env.BASE_FRONTEND_URL!,
+        },
+      });
+    }
+
+    const chat = await getChat(ctx.params.id, result.user.id);
+
+    return json({
+      data: chat,
     });
   })
   .get("/user", async (ctx) => {
-    const cookies = parseCookies(ctx.req.headers.get("Cookie") ?? "");
-    const sessionId = cookies.get(lucia.sessionCookieName) ?? null;
+    const result = await validateSession(ctx.req);
 
-    if (!sessionId) {
-      // return success but just no session
+    if (!result) {
       return new Response(null, { status: 200 });
     }
-
-    const result = await lucia.validateSession(sessionId);
 
     const response = new Response(JSON.stringify(result), { status: 200 });
 
@@ -217,3 +223,18 @@ export default routes()
       },
     });
   });
+
+async function validateSession(req: Request) {
+  const cookies = parseCookies(req.headers.get("Cookie") ?? "");
+  const sessionId = cookies.get(lucia.sessionCookieName) ?? null;
+
+  if (!sessionId) {
+    // return success but just no session1
+    // return new Response(null, { status: 200 });
+    return null;
+  }
+
+  const result = await lucia.validateSession(sessionId);
+
+  return result;
+}

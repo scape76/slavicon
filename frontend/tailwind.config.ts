@@ -4,6 +4,9 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 module.exports = {
   darkMode: ["class"],
   content: ["src/**/*.{ts,tsx}", "src/components/**/*.{ts,tsx}"],
+  corePlugins: {
+    borderOpacity: true,
+  },
   theme: {
     container: {
       center: "true",

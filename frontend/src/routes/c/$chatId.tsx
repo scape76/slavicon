@@ -1,13 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  createFileRoute,
-  defer,
-  Link,
-  notFound,
-  useLoaderData,
-  Await,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import ky from "ky";
 import { ChevronLeft } from "lucide-react";
 
