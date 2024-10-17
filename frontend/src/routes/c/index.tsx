@@ -95,6 +95,7 @@ function ChatList() {
               variant="outline"
               size="icon"
               className="absolute right-2 top-1.5"
+              onClick={() => submit()}
             >
               <Send className="size-5" />
             </Button>
