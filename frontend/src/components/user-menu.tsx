@@ -35,10 +35,12 @@ export function UserMenu({ user }: { user: User }) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <MessageSquareIcon className="mr-2 size-4" />
-          <Link href="/c">Chats</Link>
-        </DropdownMenuItem>
+        <Link to="/c">
+          <DropdownMenuItem>
+            <MessageSquareIcon className="mr-2 size-4" />
+            Chats
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()}>
           {status === "pending" ? (

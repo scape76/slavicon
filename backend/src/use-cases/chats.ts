@@ -1,6 +1,6 @@
 import type { User } from "lucia";
 import { db } from "../db";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { chats, messages } from "../db/schema";
 
 export async function getUserChats(userId: User["id"]) {
@@ -9,6 +9,7 @@ export async function getUserChats(userId: User["id"]) {
     columns: {
       id: true,
       name: true,
+      updatedAt: true,
     },
   });
 
@@ -19,6 +20,20 @@ export async function getUserChats(userId: User["id"]) {
 export async function getChat(chatId: string, userId: User["id"]) {
   const userChat = await db.query.chats.findFirst({
     where: eq(chats.id, chatId),
+    columns: {
+      userId: true,
+      name: true,
+      godName: true,
+    },
+    with: {
+      messages: {
+        orderBy: desc(messages.createdAt),
+        columns: {
+          body: true,
+          from: true,
+        }
+      }
+    }
   });
 
   if (userChat?.userId !== userId) {
@@ -41,9 +56,20 @@ export async function createChat({
     const chat = await tx.insert(chats).values({
       name: "Untitled",
       userId,
-      godName: "",
-    });
+      godName,
+    }).returning();
 
-    const mesage = await tx.insert(messages);
+    const m = await tx.insert(messages).values({
+      chatId: chat[0].id,
+      body: message,
+      from: "user",
+    }).returning();
+
+    return {
+      chat: chat[0],
+      message: m[0]
+    }
   });
+
+  return data;
 }

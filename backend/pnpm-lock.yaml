@@ -11,18 +11,15 @@ importers:
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.1.0
         version: 1.1.0(drizzle-orm@0.33.0(@types/pg@8.11.10)(bun-types@1.1.29)(pg@8.13.0))(lucia@3.2.0)
-      '@stricjs/app':
-        specifier: ^1.0.0-rc.34
-        version: 1.0.0-rc.34
-      '@stricjs/utils':
-        specifier: ^2.0.7
-        version: 2.0.7
       arctic:
         specifier: ^1.9.2
         version: 1.9.2
       drizzle-orm:
         specifier: ^0.33.0
         version: 0.33.0(@types/pg@8.11.10)(bun-types@1.1.29)(pg@8.13.0)
+      hono:
+        specifier: ^4.6.5
+        version: 4.6.5
       lucia:
         specifier: ^3.2.0
         version: 3.2.0
@@ -516,12 +513,6 @@ packages:
     resolution: {integrity: sha512-u2OlIxW264bFUfvbFqDz9HZKFjwe8FHFtn7T/U8mYjPZ7DWYpbUB+/dkW/QgYfMSfR0ejkyuWaBBe0coW7/7ig==}
     engines: {node: '>= 10'}
 
-  '@stricjs/app@1.0.0-rc.34':
-    resolution: {integrity: sha512-jEU0Dg58rg5nRpt2J6wgDJ1YA4re3OVxYQgUENnbvpBb3m4M8eF5S6gwaV1PJZLBSJydbdikoVxjEmUfadl1kQ==}
-
-  '@stricjs/utils@2.0.7':
-    resolution: {integrity: sha512-/LbpRdsb1HXsF49Ig7mNY2YlofZMFrQHIy9zIgHAtWY5nd9dJrOKJjMn1jAoPW6HqV3+5SAfzqrFiEM/ozdnoQ==}
-
   '@tybys/wasm-util@0.8.3':
     resolution: {integrity: sha512-Z96T/L6dUFFxgFJ+pQtkPpne9q7i6kIPYCFnQBHSgSPV9idTsKfIhCss0h5iM9irweZCatkrdeP8yi5uM1eX6Q==}
 
@@ -709,6 +700,10 @@ packages:
   get-tsconfig@4.8.1:
     resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==}
 
+  hono@4.6.5:
+    resolution: {integrity: sha512-qsmN3V5fgtwdKARGLgwwHvcdLKursMd+YOt69eGpl1dUCJb8mCd7hZfyZnBYjxCegBG7qkJRQRUy2oO25yHcyQ==}
+    engines: {node: '>=16.9.0'}
+
   humanize-ms@1.2.1:
     resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
 
@@ -878,9 +873,6 @@ packages:
 
   whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
-
-  wint-js@1.2.7:
-    resolution: {integrity: sha512-/qdtDKkW4EwgxGXdjxphfBxWOk8n5TQxjr//MQ4SK1oo3GO/IhWun1NnMvqGkayEs0vQUwkvENjJ2JO0GlktTA==}
 
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
@@ -1178,12 +1170,6 @@ snapshots:
       '@node-rs/bcrypt-win32-ia32-msvc': 1.9.0
       '@node-rs/bcrypt-win32-x64-msvc': 1.9.0
 
-  '@stricjs/app@1.0.0-rc.34':
-    dependencies:
-      wint-js: 1.2.7
-
-  '@stricjs/utils@2.0.7': {}
-
   '@tybys/wasm-util@0.8.3':
     dependencies:
       tslib: 2.7.0
@@ -1342,6 +1328,8 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
+  hono@4.6.5: {}
+
   humanize-ms@1.2.1:
     dependencies:
       ms: 2.1.3
@@ -1495,7 +1483,5 @@ snapshots:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
-
-  wint-js@1.2.7: {}
 
   xtend@4.0.2: {}

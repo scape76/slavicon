@@ -7,7 +7,7 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import { createTable } from "./helpers";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 export const users = createTable("user", {
   id: text("id").primaryKey(),
@@ -36,16 +36,17 @@ export type NewSession = typeof sessions.$inferInsert;
 
 export const messageAuthor = pgEnum("message_author", ["assistant", "user"]);
 
-export const gods = createTable("god", {
-  name: text("name").primaryKey(),
-  description: text("description"),
-});
-
 export const chats = createTable("chat", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
-  godName: text("god_name").references(() => gods.name),
+  godName: text("god_name").notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', {
+    mode: 'string',
+  })
+    .default(sql`current_timestamp`)
+    .$onUpdate(() => sql`current_timestamp`),
 });
 
 export const messages = createTable("message", {
@@ -59,10 +60,6 @@ export const messages = createTable("message", {
 });
 
 export const chatsRelations = relations(chats, ({ one, many }) => ({
-  god: one(gods, {
-    fields: [chats.godName],
-    references: [gods.name],
-  }),
   messages: many(messages),
 }));
 

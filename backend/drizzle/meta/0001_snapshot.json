@@ -1,6 +1,6 @@
 {
-  "id": "867fa9db-c441-4f60-b26f-173e7c6a3979",
-  "prevId": "97f835d4-38a2-4ee2-8d8e-a6b0bc7c0a35",
+  "id": "c588cb03-b783-4f28-bd23-f966475d2f5d",
+  "prevId": "b1a1c08b-3531-490d-b92c-571311c103ae",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31,43 +31,21 @@
           "name": "god_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "project_y_chat_god_name_project_y_god_name_fk": {
-          "name": "project_y_chat_god_name_project_y_god_name_fk",
-          "tableFrom": "project_y_chat",
-          "tableTo": "project_y_god",
-          "columnsFrom": [
-            "god_name"
-          ],
-          "columnsTo": [
-            "name"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.project_y_god": {
-      "name": "project_y_god",
-      "schema": "",
-      "columns": {
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": true,
           "notNull": true
         },
-        "description": {
-          "name": "description",
-          "type": "text",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "current_timestamp"
         }
       },
       "indexes": {},

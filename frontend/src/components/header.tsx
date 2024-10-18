@@ -26,7 +26,7 @@ export function Header() {
         }
       >
         {function (data) {
-          if (data.user) {
+          if (data?.user) {
             return <UserMenu user={data.user} />;
           }
 

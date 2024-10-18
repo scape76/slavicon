@@ -1,10 +1,10 @@
 {
   "name": "backend",
-  "module": "index.ts",
+  "module": "./src/index.ts",
   "type": "module",
   "scripts": {
     "finetune": "bun --env-file=.env fine-tuning/index.ts",
-    "dev": "bun run --watch index.ts",
+    "dev": "bun run --watch src/index.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio"
@@ -19,10 +19,9 @@
   },
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.1.0",
-    "@stricjs/app": "^1.0.0-rc.34",
-    "@stricjs/utils": "^2.0.7",
     "arctic": "^1.9.2",
     "drizzle-orm": "^0.33.0",
+    "hono": "^4.6.5",
     "lucia": "^3.2.0",
     "openai": "^4.67.3",
     "oslo": "^1.2.1",
