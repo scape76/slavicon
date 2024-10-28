@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CollectionRouteImport } from './routes/collection/route'
 import { Route as CRouteImport } from './routes/c/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionIndexImport } from './routes/collection/index'
@@ -19,27 +20,38 @@ import { Route as CChatIdImport } from './routes/c/$chatId'
 
 // Create/Update Routes
 
+const CollectionRouteRoute = CollectionRouteImport.update({
+  id: '/collection',
+  path: '/collection',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CRouteRoute = CRouteImport.update({
+  id: '/c',
   path: '/c',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexRoute = IndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const CollectionIndexRoute = CollectionIndexImport.update({
-  path: '/collection/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => CollectionRouteRoute,
 } as any)
 
 const CIndexRoute = CIndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => CRouteRoute,
 } as any)
 
 const CChatIdRoute = CChatIdImport.update({
+  id: '/$chatId',
   path: '/$chatId',
   getParentRoute: () => CRouteRoute,
 } as any)
@@ -62,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CRouteImport
       parentRoute: typeof rootRoute
     }
+    '/collection': {
+      id: '/collection'
+      path: '/collection'
+      fullPath: '/collection'
+      preLoaderRoute: typeof CollectionRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/c/$chatId': {
       id: '/c/$chatId'
       path: '/$chatId'
@@ -78,10 +97,10 @@ declare module '@tanstack/react-router' {
     }
     '/collection/': {
       id: '/collection/'
-      path: '/collection'
-      fullPath: '/collection'
+      path: '/'
+      fullPath: '/collection/'
       preLoaderRoute: typeof CollectionIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CollectionRouteImport
     }
   }
 }
@@ -101,12 +120,25 @@ const CRouteRouteChildren: CRouteRouteChildren = {
 const CRouteRouteWithChildren =
   CRouteRoute._addFileChildren(CRouteRouteChildren)
 
+interface CollectionRouteRouteChildren {
+  CollectionIndexRoute: typeof CollectionIndexRoute
+}
+
+const CollectionRouteRouteChildren: CollectionRouteRouteChildren = {
+  CollectionIndexRoute: CollectionIndexRoute,
+}
+
+const CollectionRouteRouteWithChildren = CollectionRouteRoute._addFileChildren(
+  CollectionRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/c': typeof CRouteRouteWithChildren
+  '/collection': typeof CollectionRouteRouteWithChildren
   '/c/$chatId': typeof CChatIdRoute
   '/c/': typeof CIndexRoute
-  '/collection': typeof CollectionIndexRoute
+  '/collection/': typeof CollectionIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -120,6 +152,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/c': typeof CRouteRouteWithChildren
+  '/collection': typeof CollectionRouteRouteWithChildren
   '/c/$chatId': typeof CChatIdRoute
   '/c/': typeof CIndexRoute
   '/collection/': typeof CollectionIndexRoute
@@ -127,23 +160,30 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/c' | '/c/$chatId' | '/c/' | '/collection'
+  fullPaths: '/' | '/c' | '/collection' | '/c/$chatId' | '/c/' | '/collection/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/c/$chatId' | '/c' | '/collection'
-  id: '__root__' | '/' | '/c' | '/c/$chatId' | '/c/' | '/collection/'
+  id:
+    | '__root__'
+    | '/'
+    | '/c'
+    | '/collection'
+    | '/c/$chatId'
+    | '/c/'
+    | '/collection/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CRouteRoute: typeof CRouteRouteWithChildren
-  CollectionIndexRoute: typeof CollectionIndexRoute
+  CollectionRouteRoute: typeof CollectionRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CRouteRoute: CRouteRouteWithChildren,
-  CollectionIndexRoute: CollectionIndexRoute,
+  CollectionRouteRoute: CollectionRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -160,7 +200,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/c",
-        "/collection/"
+        "/collection"
       ]
     },
     "/": {
@@ -173,6 +213,12 @@ export const routeTree = rootRoute
         "/c/"
       ]
     },
+    "/collection": {
+      "filePath": "collection/route.tsx",
+      "children": [
+        "/collection/"
+      ]
+    },
     "/c/$chatId": {
       "filePath": "c/$chatId.tsx",
       "parent": "/c"
@@ -182,7 +228,8 @@ export const routeTree = rootRoute
       "parent": "/c"
     },
     "/collection/": {
-      "filePath": "collection/index.tsx"
+      "filePath": "collection/index.tsx",
+      "parent": "/collection"
     }
   }
 }

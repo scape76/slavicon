@@ -41,9 +41,9 @@ export const chats = createTable("chat", {
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
   godName: text("god_name").notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', {
-    mode: 'string',
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", {
+    mode: "string",
   })
     .default(sql`current_timestamp`)
     .$onUpdate(() => sql`current_timestamp`),
@@ -58,6 +58,9 @@ export const messages = createTable("message", {
   from: messageAuthor("from").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export type Message = typeof messages.$inferSelect;
+export type NewMessage = typeof messages.$inferInsert;
 
 export const chatsRelations = relations(chats, ({ one, many }) => ({
   messages: many(messages),

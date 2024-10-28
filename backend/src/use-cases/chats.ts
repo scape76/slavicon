@@ -1,6 +1,6 @@
 import type { User } from "lucia";
 import { db } from "../db";
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { chats, messages } from "../db/schema";
 
 export async function getUserChats(userId: User["id"]) {
@@ -11,6 +11,7 @@ export async function getUserChats(userId: User["id"]) {
       name: true,
       updatedAt: true,
     },
+    orderBy: desc(chats.updatedAt),
   });
 
   return userChats;
@@ -21,19 +22,20 @@ export async function getChat(chatId: string, userId: User["id"]) {
   const userChat = await db.query.chats.findFirst({
     where: eq(chats.id, chatId),
     columns: {
+      id: true,
       userId: true,
       name: true,
       godName: true,
     },
     with: {
       messages: {
-        orderBy: desc(messages.createdAt),
+        orderBy: asc(messages.createdAt),
         columns: {
           body: true,
           from: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   if (userChat?.userId !== userId) {
@@ -41,6 +43,24 @@ export async function getChat(chatId: string, userId: User["id"]) {
   }
 
   return userChat;
+}
+
+export async function updateChatName(chatId: string, name: string) {
+  await db.update(chats).set({ name }).where(eq(chats.id, chatId));
+}
+
+export async function saveMessage(
+  chatId: string,
+  message: string,
+  from: "user" | "assistant"
+) {
+  await db.transaction(async (tx) => {
+    await tx.insert(messages).values({
+      chatId,
+      body: message,
+      from,
+    });
+  });
 }
 
 export async function createChat({
@@ -53,22 +73,28 @@ export async function createChat({
   message: string;
 }) {
   const data = await db.transaction(async (tx) => {
-    const chat = await tx.insert(chats).values({
-      name: "Untitled",
-      userId,
-      godName,
-    }).returning();
+    const chat = await tx
+      .insert(chats)
+      .values({
+        name: "Untitled",
+        userId,
+        godName,
+      })
+      .returning();
 
-    const m = await tx.insert(messages).values({
-      chatId: chat[0].id,
-      body: message,
-      from: "user",
-    }).returning();
+    const m = await tx
+      .insert(messages)
+      .values({
+        chatId: chat[0].id,
+        body: message,
+        from: "user",
+      })
+      .returning();
 
     return {
       chat: chat[0],
-      message: m[0]
-    }
+      message: m[0],
+    };
   });
 
   return data;

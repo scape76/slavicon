@@ -17,6 +17,16 @@ export default defineConfig({
         target: "http://localhost:3001",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
+        configure: (proxy, options) => {
+          // Proxy websocket/SSE connections
+          proxy.on("error", (err, req, res) => {
+            console.warn("proxy error", err);
+          });
+          proxy.on("proxyReq", (proxyReq, req, res) => {
+            proxyReq.setHeader("Connection", "keep-alive");
+            proxyReq.setHeader("Cache-Control", "no-cache");
+          });
+        },
       },
     },
   },

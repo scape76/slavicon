@@ -7,11 +7,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2 } from "lucide-react";
 import { UserMenu } from "./user-menu";
 
-export function Header() {
+interface HeaderProps {
+  toggleSidebar?: React.ReactNode;
+  className?: string;
+}
+
+export function Header({ toggleSidebar, className }: HeaderProps) {
   const { userPromise } = Route.useLoaderData();
 
   return (
-    <header className="flex py-2 sm:py-6 px-4 sm:px-6 items-center justify-between container">
+    <header
+      className={cn(
+        "flex py-2 sm:py-6 px-4 sm:px-6 items-center justify-between container",
+        className
+      )}
+    >
+      {toggleSidebar}
       <Link to="/" className="text-lg sm:text-2xl font-bold">
         WebName
       </Link>

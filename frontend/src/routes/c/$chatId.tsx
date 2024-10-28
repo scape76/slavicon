@@ -1,86 +1,162 @@
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
-import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import ky from 'ky'
-import { ChevronLeft, Send } from 'lucide-react'
+import { MessageInput } from "@/components/message-input";
+import { MessageList } from "@/components/message-list";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import ky, { HTTPError } from "ky";
+import { ChevronLeft, Send } from "lucide-react";
+import { l } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 type Message = {
   body: string;
   from: "user" | "assistant";
-}
+};
 
 type Chat = {
-  id: string
-  name: string
-  messages: Message[]
-}
+  id: string;
+  name: string;
+  messages: Message[];
+};
 
-export const Route = createFileRoute('/c/$chatId')({
+export const Route = createFileRoute("/c/$chatId")({
   loader: async ({ params: { chatId } }) => {
-    const response = await ky.get(`/api/chats/${chatId}`)
+    try {
+      const response = await ky.get(`/api/chats/${chatId}`);
 
-    if (response.status === 404) {
-      throw notFound({
-        data: {
-          chatId,
-        },
-      })
-    }
+      if (response.status === 404) {
+        throw notFound();
+      }
 
-    const { data }: {data: Chat} = await response.json()
+      const { data }: { data: Chat } = await response.json();
 
-    return {
-      data
+      return {
+        data,
+      };
+    } catch (err) {
+      throw notFound();
     }
   },
   component: Chat,
-  notFoundComponent: ({ data }: any) => {
-    return <ChatNotFound chatId={data.data.chatId} />
+  notFoundComponent: () => {
+    return <ChatNotFound />;
   },
-})
+});
 
 function Chat() {
+  const { data } = Route.useLoaderData();
+  const [isTransitioning, startTransition] = useTransition();
+
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  const [answer, setAnswer] = useState<null | string>(null);
+  const [finished, setFinished] = useState(false);
+
+  const scrollArea = useRef<HTMLDivElement>(null);
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: async (message: string) => {
+      const response = await fetch(`/api/chats/${data.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      setFinished(false);
+
+      while (true) {
+        const { done, value } = (await reader?.read()) ?? {};
+        if (done) break;
+
+        const text = decoder.decode(value ?? new Uint8Array(), {
+          stream: true,
+        });
+
+        setAnswer((prev) => (prev ? prev + text : text));
+      }
+
+      setFinished(true);
+    },
+  });
+
+  const scrollToBottom = () => {
+    setTimeout(
+      () =>
+        window.scrollTo({
+          top: window.innerHeight,
+          behavior: "smooth",
+        }),
+      0
+    );
+  };
+
+  scrollToBottom();
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, answer]);
+
+  const onSend = (message: string) => {
+    startTransition(() => {
+      const messages: Message[] = [];
+      if (answer) messages.push({ body: answer, from: "assistant" });
+      messages.push({ body: message, from: "user" });
+      setMessages((prev) => [...prev, ...messages]);
+      setAnswer(null);
+      mutate(message);
+    });
+  };
+
   return (
-    <div className="relative max-w-3xl mx-auto gap-4 h-full">
-      <MessageList/>
-      <MessageInput/>
-    </div>
-  )
-}
-
-function MessageList() {
-  const { data } = Route.useLoaderData()
-
-  return <div className='flex flex-col gap-2'>
-    {data.messages.map((message: Message) => (
-      <div key={message.body} className={cn("self-start p-4 rounded-lg border border-primary/30", {
-        "self-end": message.from === "user",
-      })}>
-        {message.body}
+    <div className="mx-4 h-full flex flex-col">
+      <div className="relative max-w-3xl mx-auto w-full flex-1 flex flex-col">
+        <ScrollArea
+          className="flex-1 pr-4"
+          viewportClassName="h-full flex flex-col justify-end"
+        >
+          <div className="pb-9">
+            <MessageList
+              messages={[...data.messages, ...messages]}
+              latestAnswer={
+                answer ? { body: answer, isFinished: finished } : undefined
+              }
+            />
+          </div>
+        </ScrollArea>
+        <div className="sticky flex flex-col items-center gap-2 bottom-0 bg-background pt-1 pb-2">
+          <MessageInput
+            onSend={onSend}
+            disabled={isTransitioning || isPending}
+          />
+          <span className="text-xs text-muted-foreground">
+            Slavic God can make mistakes :D
+          </span>
+        </div>
       </div>
-    ))}
-  </div>
-}
-
-function MessageInput() {
-  return <div className='absolute bottom-4 w-full'>
-    <div className='relative'>
-    <Input placeholder="Message text" size="xl"/>
-    <Button size="icon" variant="ghost" className='absolute right-2 top-1.5'><Send className='size-4'/></Button>
     </div>
-  </div>
+  );
 }
 
-function ChatNotFound({ chatId }: { chatId: string }) {
+function ChatNotFound() {
   return (
     <div className="h-[calc(100vh-45px)] flex flex-col items-center justify-center gap-4">
       <h1 className="text-4xl font-bold">Chat Not Found</h1>
-      <p>The chat with id {chatId} does not exist.</p>
-      <Link to="/c" className={cn(buttonVariants({ variant: 'outline' }))}>
+      <p>The chat you are looking for does not exist.</p>
+      <Link to="/c" className={cn(buttonVariants({ variant: "outline" }))}>
         <ChevronLeft className="mr-2 size-4" />
-        Go to the chat list
+        Go back
       </Link>
     </div>
-  )
+  );
 }

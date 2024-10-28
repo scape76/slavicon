@@ -25,7 +25,6 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
     </QueryClientProvider>

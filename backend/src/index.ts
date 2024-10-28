@@ -1,28 +1,41 @@
 import { Hono, type Context } from "hono";
-import { generateCodeVerifier, generateState, OAuth2RequestError } from "arctic";
+import {
+  generateCodeVerifier,
+  generateState,
+  OAuth2RequestError,
+} from "arctic";
 import { google, lucia } from "./lucia";
 import { parseCookies, serializeCookie } from "oslo/cookie";
 import { db } from "./db";
-import { users } from "./db/schema";
+import { users, type Message } from "./db/schema";
 import { generateIdFromEntropySize } from "lucia";
 import { eq } from "drizzle-orm";
-import { createChat, getChat, getUserChats } from "./use-cases/chats";
+import {
+  createChat,
+  getChat,
+  getUserChats,
+  saveMessage,
+  updateChatName,
+} from "./use-cases/chats";
 import { getCookie, setCookie } from "hono/cookie";
 import { cors } from "hono/cors";
-import {stream, streamText, streamSSE} from "hono/streaming"
+import { stream, streamText, streamSSE } from "hono/streaming";
 import { csrf } from "hono/csrf";
+import { generateChatName } from "./use-cases/openai";
 
 const app = new Hono();
 
-app.use('*', cors({
-  origin: process.env.BASE_FRONTEND_URL!,
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
 
-app.use('*', csrf());
+app.use("*", csrf());
 
-app.get('/chats', async (c) => {
+app.get("/chats", async (c) => {
   const result = await validateSession(c);
 
   if (!result?.user) {
@@ -33,19 +46,23 @@ app.get('/chats', async (c) => {
   return c.json({ data: chats }, 200);
 });
 
-app.get('/chats/:id', async (c) => {
+app.get("/chats/:id", async (c) => {
   const result = await validateSession(c);
 
   if (!result?.user) {
-    return c.json({ data: [] }, 200);
+    return c.notFound();
   }
 
   const chat = await getChat(c.req.param("id"), result.user.id);
 
+  if (!chat) {
+    return c.notFound();
+  }
+
   return c.json({ data: chat }, 200);
 });
 
-app.post('/chats', async (c) => {
+app.post("/chats", async (c) => {
   const result = await validateSession(c);
 
   if (!result?.user) {
@@ -53,29 +70,125 @@ app.post('/chats', async (c) => {
   }
 
   const { message, godName } = await c.req.json();
- 
-  console.log(message, godName);
 
   if (!message) {
-    return c.json({error: "Message is required"}, 400);
+    return c.json({ error: "Message is required" }, 400);
   }
-  return streamSSE(c, async (stream) => {
 
-  const data = await createChat({
-    godName,
-    userId: result.user.id,
-    message,
-  }); 
+  return streamText(c, async (stream) => {
+    const data = await createChat({
+      godName,
+      userId: result.user.id,
+      message,
+    });
 
-  await stream.writeSSE({
-    data: JSON.stringify(data),
-    event: "data-created",
-    id: "data-created",
-  })
-  })
-})
+    const chatId = data.chat.id;
 
-app.get('/user', async (c) => {
+    const streamData = await ask(message);
+    const reader = streamData?.getReader();
+
+    if (!reader) {
+      return;
+    }
+
+    const decoder = new TextDecoder();
+
+    let buffer = "";
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) break;
+
+      const json = decoder.decode(value ?? new Uint8Array(), { stream: true });
+      for (const line of json.split("\n")) {
+        if (line.trim() === "") continue;
+
+        const body = JSON.parse(line);
+
+        const text = body.message.content;
+
+        buffer += text;
+
+        await stream.write("r" + text);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    }
+
+    await saveMessage(chatId, buffer, "assistant");
+
+    const chatName = await generateChatName({
+      question: message,
+      answer: buffer,
+    });
+
+    await updateChatName(chatId, chatName ?? "Untitled");
+
+    await stream.write("c" + chatId);
+
+    await stream.close();
+  });
+});
+app.post("/chats/:id", async (c) => {
+  const result = await validateSession(c);
+
+  if (!result?.user) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const { message } = await c.req.json();
+
+  if (!message) {
+    return c.json({ error: "Message is required" }, 400);
+  }
+
+  const chatId = c.req.param("id");
+
+  const chat = await getChat(chatId, result.user.id);
+
+  if (!chat) {
+    return c.notFound();
+  }
+
+  await saveMessage(chatId, message, "user");
+
+  return streamText(c, async (stream) => {
+    const streamData = await ask(message, chat.messages);
+    const reader = streamData?.getReader();
+
+    if (!reader) {
+      return;
+    }
+
+    const decoder = new TextDecoder();
+
+    let buffer = "";
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) break;
+
+      const json = decoder.decode(value ?? new Uint8Array(), { stream: true });
+
+      for (const line of json.split("\n")) {
+        if (line.trim() === "") continue;
+
+        const body = JSON.parse(line);
+
+        const text = body.message.content;
+        buffer += text;
+
+        await stream.write(text);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    }
+
+    await saveMessage(chatId, buffer, "assistant");
+
+    await stream.close();
+  });
+});
+
+app.get("/user", async (c) => {
   const result = await validateSession(c);
 
   if (!result) {
@@ -87,13 +200,17 @@ app.get('/user', async (c) => {
 
     setCookie(c, lucia.sessionCookieName, sessionCookie.serialize());
   } else if (!result.session) {
-    setCookie(c, lucia.sessionCookieName, lucia.createBlankSessionCookie().serialize());
+    setCookie(
+      c,
+      lucia.sessionCookieName,
+      lucia.createBlankSessionCookie().serialize()
+    );
   }
 
   return c.json(result, 200);
 });
 
-app.get('/auth/google', async (c) => {
+app.get("/auth/google", async (c) => {
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
   const url = await google.createAuthorizationURL(state, codeVerifier, {
@@ -119,7 +236,7 @@ app.get('/auth/google', async (c) => {
   return c.redirect(url.toString());
 });
 
-app.get('/auth/google/callback', async (c) => {
+app.get("/auth/google/callback", async (c) => {
   const stateCookie = getCookie(c, "google_oauth_state") ?? null;
   const codeVerifierCookie = getCookie(c, "code_verifier") ?? null;
 
@@ -127,12 +244,21 @@ app.get('/auth/google/callback', async (c) => {
   const state = url.searchParams.get("state");
   const code = url.searchParams.get("code");
 
-  if (!state || !stateCookie || !code || stateCookie !== state || !codeVerifierCookie) {
+  if (
+    !state ||
+    !stateCookie ||
+    !code ||
+    stateCookie !== state ||
+    !codeVerifierCookie
+  ) {
     return c.json(null, 400);
   }
 
   try {
-    const tokens = await google.validateAuthorizationCode(code, codeVerifierCookie);
+    const tokens = await google.validateAuthorizationCode(
+      code,
+      codeVerifierCookie
+    );
     const userInfoResponse = await fetch(
       "https://openidconnect.googleapis.com/v1/userinfo",
       { headers: { Authorization: `Bearer ${tokens.accessToken}` } }
@@ -149,7 +275,7 @@ app.get('/auth/google/callback', async (c) => {
       c.header("Set-Cookie", sessionCookie.serialize(), {
         append: true,
       });
-  
+
       return c.redirect(process.env.BASE_FRONTEND_URL!);
     }
 
@@ -167,14 +293,14 @@ app.get('/auth/google/callback', async (c) => {
     c.header("Set-Cookie", sessionCookie.serialize(), {
       append: true,
     });
-    
+
     return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
   } catch (e) {
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }
 });
 
-app.post('/logout', async (c) => {
+app.post("/logout", async (c) => {
   const sessionId = getCookie(c, lucia.sessionCookieName) ?? null;
 
   if (!sessionId) {
@@ -196,6 +322,27 @@ async function validateSession(c: Context) {
 
   const result = await lucia.validateSession(sessionId);
   return result;
+}
+
+async function ask(
+  message: string,
+  context: Pick<Message, "body" | "from">[] = []
+): Promise<ReadableStream<Uint8Array> | null> {
+  const res = await fetch("http://localhost:11434/api/chat", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "llama3.2:3b",
+      messages: [
+        ...context.map((m) => ({ role: m.from, content: m.body })),
+        { role: "user", content: message },
+      ],
+      stream: true,
+    }),
+  });
+
+  return res.body;
 }
 
 export default app;
