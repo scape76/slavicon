@@ -3,12 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import ky from "ky";
 import { ChevronLeft, Loader2, MessageSquarePlus, Send } from "lucide-react";
 import { useMemo, useState } from "react";
-import { AssistantBubble } from "@/components/assistant-bubble";
 import { MessageList } from "@/components/message-list";
 import { MessageInput } from "@/components/message-input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Chat = {
   id: string;
@@ -158,13 +157,25 @@ function FakeRoom({
   finished: boolean;
 }) {
   return (
-    <div className="mx-4 h-full">
-      <div className="relative max-w-3xl mx-auto gap-4 h-full">
-        <MessageList
-          messages={[{ body: message, from: "user" }]}
-          latestAnswer={{ body: response, isFinished: finished }}
-        />
-        <MessageInput onSend={() => {}} disabled={true} />
+    <div className="mx-4 h-full flex flex-col">
+      <div className="relative max-w-3xl mx-auto gap-4 h-full flex-1 flex flex-col">
+        <ScrollArea
+          className="flex-1 pr-4"
+          viewportClassName="h-full flex flex-col justify-end"
+        >
+          <div className="pb-9">
+            <MessageList
+              messages={[{ body: message, from: "user" }]}
+              latestAnswer={{ body: response, isFinished: finished }}
+            />
+          </div>
+        </ScrollArea>
+        <div className="sticky flex flex-col items-center gap-2 bottom-0 bg-background pt-1 pb-2">
+          <MessageInput onSend={() => {}} disabled={true} />
+          <span className="text-xs text-muted-foreground">
+            Slavic God is not a reliable source of information! :0
+          </span>
+        </div>
       </div>
     </div>
   );
