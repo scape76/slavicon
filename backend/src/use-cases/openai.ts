@@ -1,3 +1,4 @@
+import type { Message } from "../db/schema";
 import { openai } from "../openai";
 
 export async function generateChatName({
@@ -28,4 +29,25 @@ export async function generateChatName({
   });
 
   return completion.choices[0].message.content;
+}
+
+export async function ask(
+  message: string,
+  context: Pick<Message, "body" | "from">[] = []
+): Promise<ReadableStream<Uint8Array> | null> {
+  const res = await fetch("http://localhost:11434/api/chat", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "llama3.2:3b",
+      messages: [
+        ...context.map((m) => ({ role: m.from, content: m.body })),
+        { role: "user", content: message },
+      ],
+      stream: true,
+    }),
+  });
+
+  return res.body;
 }
