@@ -54,8 +54,6 @@ function Chat() {
   const [answer, setAnswer] = useState<null | string>(null);
   const [finished, setFinished] = useState(false);
 
-  const scrollArea = useRef<HTMLDivElement>(null);
-
   const { isPending, mutate } = useMutation({
     mutationFn: async (message: string) => {
       const response = await fetch(`/api/chats/${data.id}`, {
