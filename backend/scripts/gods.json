@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Perun",
+    "knownAs": "God of the Sky and Thunder",
+    "image": "/perun.jpg"
+  },
+  {
+    "name": "Veles",
+    "knownAs": "God of the Earth and Underworld",
+    "image": "/velec.png"
+  },
+  {
+    "name": "Dazhbog",
+    "knownAs": "God of the Underworld",
+    "image": "/dazhbog.jpg"
+  }
+]

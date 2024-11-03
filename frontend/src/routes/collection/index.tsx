@@ -90,7 +90,11 @@ export const Route = createFileRoute("/collection/")({
         </div>
         <div className="relative flex-1">
           <BlurFade delay={0.2}>
-            <img src={god.image} alt={god.name} className="dark:invert max-h-full z-10" />
+            <img
+              src={god.image}
+              alt={god.name}
+              className="dark:invert max-h-full z-10"
+            />
           </BlurFade>
           <div className="absolute left-[50%] translate-x-[-50%] bottom-0 flex gap-2">
             <Link
