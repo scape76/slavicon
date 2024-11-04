@@ -15,19 +15,6 @@ module.exports = {
             "2xl": "1900px",
          },
       },
-      backgroundPosition: {
-         bottom: "bottom",
-         center: "center",
-         left: "left",
-         right: "right",
-         top: "top",
-         "left-4": "center left 4rem",
-      },
-      backgroundImage: {
-         image_backlight:
-            "radial-gradient(ellipse at center, rgba(255,64,226,0.7) 0%, rgba(4,9,12,0) 80%)",
-         question_field: "url(/background/question.png)",
-      },
       boxShadow: {
          "white-black": [
             "-2px -2px 4px rgba(255, 241, 241, 0.05)",

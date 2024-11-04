@@ -113,9 +113,6 @@
 
    body {
       @apply bg-background text-foreground;
-      background-image: url("/background/background-main.png");
-      background-repeat: no-repeat;
-      background-size: 1600px 1080px;
    }
 
    #app {
@@ -144,11 +141,6 @@
          linear-gradient(#fff 0 0) padding-box,
          linear-gradient(#fff 0 0);
       mask-composite: exclude;
-   }
-
-   :root {
-   }
-   .dark {
    }
 }
 

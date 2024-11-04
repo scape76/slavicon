@@ -31,7 +31,7 @@ const collection = [
       name: "Dazhbog",
       function: "God of the Underworld",
       description: "Dazhbog description",
-      image: "/dazhbog.png",
+      image: "/dazhbog-test.png",
    },
 ] as const;
 
@@ -108,7 +108,7 @@ export const Route = createFileRoute("/collection/")({
             <div className="relative flex-1 flex justify-center">
                <BlurFade
                   delay={0.3}
-                  className="flex justify-center absolute z-0 bottom-0"
+                  className="flex justify-center absolute -z-[1] bottom-0"
                >
                   <img
                      src={god.image}
@@ -117,7 +117,7 @@ export const Route = createFileRoute("/collection/")({
                   />
                </BlurFade>
 
-               <div className="bg-question_field flex flex-col bg-no-repeat p-6 pt-9 w-[342px] items-center gap-4 h-[208px] absolute top-[-8px] left-2 bg-cover">
+               <div className="bg-[url('/background/question.png')] flex flex-col bg-no-repeat p-6 pt-9 w-[342px] items-center gap-4 h-[208px] absolute top-[-8px] left-2 bg-cover">
                   <FadeText
                      direction="left"
                      transition={{ delay: 0.4, duration: 0.4 }}

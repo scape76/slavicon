@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
    return (
-      <>
+      <div className="flex-1 flex flex-col bg-[url('/background/background-main.png')] bg-no-repeat bg-contain">
          <Header />
          <main className="container h-[screen] flex-1 grid gap-5 ">
             <div className="ml-auto w-3/4 h-full flex flex-col justify-center">
@@ -59,6 +59,6 @@ function HomeComponent() {
                </BlurFade>
             </div>
          </main>
-      </>
+      </div>
    );
 }
