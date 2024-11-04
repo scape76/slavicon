@@ -15,6 +15,13 @@
       "when": 1729241741007,
       "tag": "0001_wealthy_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1730659665222,
+      "tag": "0002_spotty_naoko",
+      "breakpoints": true
     }
   ]
 }

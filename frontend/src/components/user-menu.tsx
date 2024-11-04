@@ -17,7 +17,7 @@ export function UserMenu({ user }: { user: User }) {
   const router = useRouter();
 
   const { mutate: logout, status } = useMutation({
-    mutationFn: () => ky.post("/api/logout").json(),
+    mutationFn: () => ky.post("/api/auth/logout").json(),
     onSuccess: () => {
       router.invalidate();
     },

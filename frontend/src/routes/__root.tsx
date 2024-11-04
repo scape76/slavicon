@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   loader: () => {
-    const userPromise: Promise<LoaderData> = ky.get("/api/user").json();
+    const userPromise: Promise<LoaderData> = ky.get("/api/auth/user").json();
 
     return {
       userPromise: defer(userPromise),
