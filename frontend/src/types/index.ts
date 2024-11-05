@@ -5,6 +5,13 @@ export type User = {
   username: string | null;
 };
 
+export type God = {
+  name: string;
+  knownAs: string;
+  description?: string;
+  image: string;
+};
+
 export type LoaderData = {
   session: any;
   user: User;

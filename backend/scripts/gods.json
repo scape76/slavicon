@@ -2,7 +2,7 @@
   {
     "name": "Perun",
     "knownAs": "God of the Sky and Thunder",
-    "image": "/perun.jpg"
+    "image": "/perun.png"
   },
   {
     "name": "Veles",
@@ -12,6 +12,6 @@
   {
     "name": "Dazhbog",
     "knownAs": "God of the Underworld",
-    "image": "/dazhbog.jpg"
+    "image": "/dazhbog-test.png"
   }
 ]

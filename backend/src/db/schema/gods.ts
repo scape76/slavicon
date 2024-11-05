@@ -7,3 +7,6 @@ export const gods = createTable("god", {
   description: text("description"),
   image: text("image").notNull(),
 });
+
+export type God = typeof gods.$inferSelect;
+export type NewGod = typeof gods.$inferInsert;
