@@ -18,7 +18,7 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
    return (
       <header
          className={cn(
-            "flex py-2 sm:py-12 px-4 sm:px-6 items-center justify-between container",
+            "flex py-8 md:py-2 sm:py-12 px-4 sm:px-6 items-center justify-between container",
             className
          )}
       >
