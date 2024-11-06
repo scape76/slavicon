@@ -35,7 +35,7 @@ export async function getGod(name: God["name"]) {
         name: res.name,
         description: res.description,
         image: res.image,
-        knownAs: res.knows_as,
+        knownAs: res.known_as,
         prevName: res.prev_name,
         nextName: res.next_name,
       };

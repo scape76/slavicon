@@ -1,5 +1,10 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  useRouter,
+} from "@tanstack/react-router";
 import {
   ArrowRight,
   BookOpenText,
@@ -19,6 +24,8 @@ type GodPageInfo = God & {
   nextName: string;
 };
 
+type Topic = "info" | "events" | "places";
+
 export const Route = createFileRoute("/collection/$godName")({
   loader: async ({ params }) => {
     try {
@@ -30,6 +37,25 @@ export const Route = createFileRoute("/collection/$godName")({
     } catch (err) {
       throw notFound();
     }
+  },
+  validateSearch: (search: Record<string, unknown>) => {
+    const topic = search?.topic;
+
+    if (!topic) {
+      return {
+        topic: "info",
+      };
+    }
+
+    if (!["info", "places", "events"].includes(topic as any)) {
+      return {
+        topic: "info",
+      };
+    }
+
+    return {
+      topic: search.topic,
+    };
   },
   notFoundComponent: () => (
     <section className="container h-[calc(100vh-var(--header-height))] flex flex-col items-center justify-center gap-8">
@@ -60,8 +86,9 @@ export const Route = createFileRoute("/collection/$godName")({
   ),
   component: () => {
     const god = Route.useLoaderData();
+    const { topic } = Route.useSearch();
 
-    const [activeButton, setActiveButton] = useState("book");
+    const router = useRouter();
 
     return (
       <section className="container h-[calc(100vh-var(--header-height))] flex gap-4 pb-0 pl-[1.5rem] pr-0">
@@ -86,23 +113,44 @@ export const Route = createFileRoute("/collection/$godName")({
 
         <div className="flex flex-col gap-2 w-16">
           <Button
-            variant={activeButton === "book" ? "active" : "outline"}
+            variant={topic === "info" ? "active" : "outline"}
             size="lg"
-            onClick={() => setActiveButton("book")}
+            onClick={() =>
+              router.navigate({
+                to: `/collection/${god.name}`,
+                search: {
+                  topic: "info",
+                },
+              })
+            }
           >
             <BookOpenText />
           </Button>
           <Button
-            variant={activeButton === "notepad" ? "active" : "outline"}
+            variant={topic === "events" ? "active" : "outline"}
             size="lg"
-            onClick={() => setActiveButton("notepad")}
+            onClick={() =>
+              router.navigate({
+                to: `/collection/${god.name}`,
+                search: {
+                  topic: "events",
+                },
+              })
+            }
           >
             <NotepadText />
           </Button>
           <Button
-            variant={activeButton === "castle" ? "active" : "outline"}
+            variant={topic === "places" ? "active" : "outline"}
             size="lg"
-            onClick={() => setActiveButton("castle")}
+            onClick={() =>
+              router.navigate({
+                to: `/collection/${god.name}`,
+                search: {
+                  topic: "places",
+                },
+              })
+            }
           >
             <Castle />
           </Button>
@@ -150,6 +198,9 @@ export const Route = createFileRoute("/collection/$godName")({
             <Link
               from={Route.id}
               preload={"render"}
+              search={{
+                topic,
+              }}
               to={`/collection/${god.prevName}`}
               className={buttonVariants({
                 variant: "ghost",
@@ -160,6 +211,9 @@ export const Route = createFileRoute("/collection/$godName")({
             </Link>
             <Link
               from={Route.id}
+              search={{
+                topic,
+              }}
               preload={"render"}
               to={`/collection/${god.nextName}`}
               className={buttonVariants({
