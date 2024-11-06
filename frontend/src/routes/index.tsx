@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
   return (
-    <div className="flex-1 flex flex-col bg-[url('/background/background-main.png')] bg-no-repeat bg-contain">
+    <div className="flex-1 flex flex-col bg-[url('/background/background-main.png')] bg-no-repeat bg-cover bg-[-40vw_center] md:bg-[center_center]  xl:bg-contain">
       <Header />
       <main className="container h-[screen] flex-1 grid gap-5 ">
         <div className="md:ml-auto gap-8 lg:w-3/4 h-full flex flex-col justify-center">
