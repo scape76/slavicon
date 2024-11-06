@@ -38,6 +38,7 @@ export async function getGod(name: God["name"]) {
         knownAs: res.known_as,
         prevName: res.prev_name,
         nextName: res.next_name,
+        information: res.information,
       };
     });
 

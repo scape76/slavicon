@@ -2,16 +2,69 @@
   {
     "name": "Perun",
     "knownAs": "God of the Sky and Thunder",
-    "image": "/perun.png"
+    "image": "/perun.png",
+    "description": "# Perun — God of Thunder and War\n\n## Role and Attributes\nPerun is the powerful god of thunder, lightning, war, and rain, embodying both fire and iron. He is the patron of warriors, protector of the military, and often associated with leadership.\n\n- **Control over natural forces**: thunder, lightning, and rain\n- **Military protection**: protector of warriors, akin to Mars or Taranis\n\n## Mythological Parallels\nPerun's role resembles other Indo-European thunder gods:\n\n- **Zeus** in Greek mythology\n- **Jupiter** in Roman tradition\n- **Thor** in Norse myths\n- **Indra** in Vedic lore\n\n## Symbols and Iconography\nDepicted with weapons like an axe, hammer, or arrows, Perun's symbols include:\n\n- **Oak**: sacred tree associated with him\n- **Eagle**: animal symbolizing his might\n- **Perun's Stones**: believed to be thunderstones\n\n## Customs and Beliefs\nCertain taboos and customs were observed around thunder and lightning, as Perun was feared and revered as a bringer of storms and justice.\n\n### Fun Facts\n- The folk hero Kotygoroshko may be inspired by Perun.\n- **Sayings**: \"adding pepper\" relates to Perun's fiery persona.",
+    "information": {
+      "perun": {
+        "weapon": "hammer, mace or axe",
+        "battles": "battle of perun and veles",
+        "animals": "eagle",
+        "symbol": "oak, fire, iris"
+      },
+      "genealogy": {
+        "consort": "mokosh, perunika or dodola",
+        "children": "jarilo and morana"
+      },
+      "equivalents": {
+        "indoeuropean": "perkwunos",
+        "norse": "thor",
+        "finnic": "ukko or uku",
+        "baltic": "perkūnas"
+      }
+    }
   },
   {
     "name": "Veles",
     "knownAs": "God of the Earth and Underworld",
-    "image": "/velec.png"
+    "image": "/velec.png",
+    "description": "# Veles — God of the Earth, Waters, and the Underworld\n\n## Role and Attributes\nVeles is the Slavic god of the earth, forests, waters, and the underworld, associated with wealth, trickery, music, and magic. Known as a shape-shifter, Veles moves between worlds, symbolizing duality and mystery.\n\n- **Domains**: forests, waters, cattle, and prosperity\n- **Patron of**: magicians, musicians, and tricksters\n\n## Symbols and Festivals\nVeles is celebrated during the **Festival of Veles** in winter, representing transition and rebirth.\n\n- **Symbol**: willow tree, marking his connection to water and the underworld\n- **Animals**: wolf, snake, dragon, symbolizing his shapeshifting nature\n\n## Mythological Parallels\nHis equivalents in other mythologies are:\n\n- **Hades and Hermes** in Greek\n- **Loki and Odin** in Norse\n\n## Fun Facts\nVeles is the rival of Perun, representing earthly powers versus sky powers, creating a cosmic balance.",
+    "information": {
+      "veles": {
+        "godOf": "earth, waters, forests, underworld, music, magic, trickery, cattle, and wealth",
+        "abode": "Nav, Slavic afterlife",
+        "weapon": "spear",
+        "battles": "battle of perun and veles",
+        "animals": "wolf, bear, snake, dragon, owl",
+        "symbol": "willow",
+        "festivals": "the festival of veles"
+      },
+      "equivalents": {
+        "christian": "saint blaise",
+        "greek": "hades, hermes",
+        "indoeuropean": "welnos",
+        "norse": "hela, loki, odin",
+        "prussian": "peckols"
+      }
+    }
   },
   {
     "name": "Dazhbog",
-    "knownAs": "God of the Underworld",
-    "image": "/dazhbog-test.png"
+    "knownAs": "God of the Sun and Prosperity",
+    "image": "/dazhbog-test.png",
+    "description": "# Dazhbog — God of the Sun and Prosperity\n\n## Role and Attributes\nDazhbog is the bringer of warmth, light, and prosperity, often seen as a god of abundance and fortune. As the sun deity, he is associated with sunlight, harvest, and the turning of seasons.\n\n- **God of**: Sun, abundance, and fortune\n- **Symbol**: fire, reflecting his solar power\n\n## Myths and Family\nDazhbog is believed to be the son of Svarog, symbolizing continuity and fertility. His possible children, **the Zoryas**, are goddesses of dawn and dusk.\n\n## Celebrations\nHe is especially honored during the **Summer Solstice** when the sun reaches its peak.\n\n### Fun Facts\nSome scholars connect Dazhbog with other sun deities, like the Greek **Helios**. His role in folklore symbolizes both life-giving force and cosmic continuity.",
+    "information": {
+      "dazhbog": {
+        "godOf": "sun, abundance, prosperity, fortune",
+        "abode": "sky, palace of the sun",
+        "weapon": "rays of sunlight, chariot",
+        "animals": "wolf, falcon",
+        "symbol": "sun, fire",
+        "festivals": "celebrations around the summer solstice"
+      },
+      "genealogy": {
+        "father": "Svarog",
+        "children": "possibly the Zoryas (dawn goddesses)"
+      }
+    }
   }
 ]

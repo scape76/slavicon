@@ -1,10 +1,13 @@
-import { text, varchar } from "drizzle-orm/pg-core";
+import { json, text, varchar } from "drizzle-orm/pg-core";
 import { createTable } from "../helpers";
+
+type GodInfo = Record<any, Record<any, any>>;
 
 export const gods = createTable("god", {
   name: varchar("name", { length: 255 }).notNull().primaryKey(),
   knownAs: text("known_as").notNull(),
-  description: text("description"),
+  description: text("description").notNull(),
+  information: json("information").$type<GodInfo>().notNull(),
   image: text("image").notNull(),
 });
 

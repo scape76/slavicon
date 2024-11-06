@@ -1,6 +1,8 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
+  Await,
   createFileRoute,
+  defer,
   Link,
   notFound,
   useRouter,
@@ -18,6 +20,10 @@ import BlurFade from "@/components/ui/blur-fade";
 import { useState } from "react";
 import ky from "ky";
 import { God, Result } from "@/types";
+import { InfoTable } from "@/components/collection/info-table";
+import { Details } from "@/components/collection/details";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { serialize } from "next-mdx-remote/serialize";
 
 type GodPageInfo = God & {
   prevName: string;
@@ -33,12 +39,16 @@ export const Route = createFileRoute("/collection/$godName")({
 
       const { data } = (await response.json()) as Result<GodPageInfo>;
 
-      return data;
+      console.log("data is in here ", data);
+
+      const serializePromise = serialize(data.description || "");
+
+      return { ...data, detailsPromise: defer(serializePromise) };
     } catch (err) {
       throw notFound();
     }
   },
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (search: Record<string, unknown>): { topic: Topic } => {
     const topic = search?.topic;
 
     if (!topic) {
@@ -54,7 +64,7 @@ export const Route = createFileRoute("/collection/$godName")({
     }
 
     return {
-      topic: search.topic,
+      topic: search.topic as Topic,
     };
   },
   notFoundComponent: () => (
@@ -108,7 +118,18 @@ export const Route = createFileRoute("/collection/$godName")({
             </FadeText>
           </div>
           <hr className="w-1/2 ml-auto border-b border-border" />
-          <p className="text-2xl text-justify">{god.description}</p>
+          <ScrollArea className="pr-4">
+            {topic === "info" && <InfoTable information={god.information} />}
+            {topic === "events" && (
+              <Await
+                promise={god.detailsPromise}
+                fallback={<span>parsing...</span>}
+              >
+                {(source) => <Details mdxSource={source} />}
+              </Await>
+            )}
+          </ScrollArea>
+          {/* <p className="text-2xl text-justify">{god.description}</p> */}
         </div>
 
         <div className="flex flex-col gap-2 w-16">
