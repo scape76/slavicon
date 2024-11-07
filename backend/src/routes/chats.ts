@@ -1,4 +1,3 @@
-import app from "../index";
 import {
   createChat,
   getChat,

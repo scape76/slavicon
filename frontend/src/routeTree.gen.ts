@@ -14,8 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as CollectionRouteImport } from './routes/collection/route'
 import { Route as CRouteImport } from './routes/c/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as CollectionIndexImport } from './routes/collection/index'
 import { Route as CIndexImport } from './routes/c/index'
+import { Route as CollectionGodNameImport } from './routes/collection/$godName'
 import { Route as CChatIdImport } from './routes/c/$chatId'
 
 // Create/Update Routes
@@ -38,16 +38,16 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CollectionIndexRoute = CollectionIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => CollectionRouteRoute,
-} as any)
-
 const CIndexRoute = CIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CRouteRoute,
+} as any)
+
+const CollectionGodNameRoute = CollectionGodNameImport.update({
+  id: '/$godName',
+  path: '/$godName',
+  getParentRoute: () => CollectionRouteRoute,
 } as any)
 
 const CChatIdRoute = CChatIdImport.update({
@@ -88,19 +88,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CChatIdImport
       parentRoute: typeof CRouteImport
     }
+    '/collection/$godName': {
+      id: '/collection/$godName'
+      path: '/$godName'
+      fullPath: '/collection/$godName'
+      preLoaderRoute: typeof CollectionGodNameImport
+      parentRoute: typeof CollectionRouteImport
+    }
     '/c/': {
       id: '/c/'
       path: '/'
       fullPath: '/c/'
       preLoaderRoute: typeof CIndexImport
       parentRoute: typeof CRouteImport
-    }
-    '/collection/': {
-      id: '/collection/'
-      path: '/'
-      fullPath: '/collection/'
-      preLoaderRoute: typeof CollectionIndexImport
-      parentRoute: typeof CollectionRouteImport
     }
   }
 }
@@ -121,11 +121,11 @@ const CRouteRouteWithChildren =
   CRouteRoute._addFileChildren(CRouteRouteChildren)
 
 interface CollectionRouteRouteChildren {
-  CollectionIndexRoute: typeof CollectionIndexRoute
+  CollectionGodNameRoute: typeof CollectionGodNameRoute
 }
 
 const CollectionRouteRouteChildren: CollectionRouteRouteChildren = {
-  CollectionIndexRoute: CollectionIndexRoute,
+  CollectionGodNameRoute: CollectionGodNameRoute,
 }
 
 const CollectionRouteRouteWithChildren = CollectionRouteRoute._addFileChildren(
@@ -137,15 +137,16 @@ export interface FileRoutesByFullPath {
   '/c': typeof CRouteRouteWithChildren
   '/collection': typeof CollectionRouteRouteWithChildren
   '/c/$chatId': typeof CChatIdRoute
+  '/collection/$godName': typeof CollectionGodNameRoute
   '/c/': typeof CIndexRoute
-  '/collection/': typeof CollectionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/collection': typeof CollectionRouteRouteWithChildren
   '/c/$chatId': typeof CChatIdRoute
+  '/collection/$godName': typeof CollectionGodNameRoute
   '/c': typeof CIndexRoute
-  '/collection': typeof CollectionIndexRoute
 }
 
 export interface FileRoutesById {
@@ -154,23 +155,29 @@ export interface FileRoutesById {
   '/c': typeof CRouteRouteWithChildren
   '/collection': typeof CollectionRouteRouteWithChildren
   '/c/$chatId': typeof CChatIdRoute
+  '/collection/$godName': typeof CollectionGodNameRoute
   '/c/': typeof CIndexRoute
-  '/collection/': typeof CollectionIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/c' | '/collection' | '/c/$chatId' | '/c/' | '/collection/'
+  fullPaths:
+    | '/'
+    | '/c'
+    | '/collection'
+    | '/c/$chatId'
+    | '/collection/$godName'
+    | '/c/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/c/$chatId' | '/c' | '/collection'
+  to: '/' | '/collection' | '/c/$chatId' | '/collection/$godName' | '/c'
   id:
     | '__root__'
     | '/'
     | '/c'
     | '/collection'
     | '/c/$chatId'
+    | '/collection/$godName'
     | '/c/'
-    | '/collection/'
   fileRoutesById: FileRoutesById
 }
 
@@ -216,20 +223,20 @@ export const routeTree = rootRoute
     "/collection": {
       "filePath": "collection/route.tsx",
       "children": [
-        "/collection/"
+        "/collection/$godName"
       ]
     },
     "/c/$chatId": {
       "filePath": "c/$chatId.tsx",
       "parent": "/c"
     },
+    "/collection/$godName": {
+      "filePath": "collection/$godName.tsx",
+      "parent": "/collection"
+    },
     "/c/": {
       "filePath": "c/index.tsx",
       "parent": "/c"
-    },
-    "/collection/": {
-      "filePath": "collection/index.tsx",
-      "parent": "/collection"
     }
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "project_y_god" ADD COLUMN "places" text NOT NULL;

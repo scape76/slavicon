@@ -38,8 +38,7 @@ function HomeComponent() {
         </div>
         <div className="flex justify-between items-center">
           <Link
-            to="/collection"
-            search={{ name: "Veles" }}
+            to={`/collection/${"Veles"}` as any}
             className="ml-auto md:ml-0 group text-muted-foreground hover:text-accent-foreground font-bold focus:text-accent-foreground transition-colors duration-300 active:text-accent-foreground text-xl flex flex-col uppercase"
           >
             <FadeText
