@@ -13,6 +13,7 @@ import {
   Castle,
   ChevronLeft,
   ChevronRight,
+  Divide,
   NotepadText,
 } from "lucide-react";
 import { FadeText } from "@/components/ui/fade-text";
@@ -21,9 +22,10 @@ import { useState } from "react";
 import ky from "ky";
 import { God, Result } from "@/types";
 import { InfoTable } from "@/components/collection/info-table";
-import { Details } from "@/components/collection/details";
+import { Markdown } from "@/components/markdown";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { serialize } from "next-mdx-remote/serialize";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type GodPageInfo = God & {
   prevName: string;
@@ -32,18 +34,24 @@ type GodPageInfo = God & {
 
 type Topic = "info" | "events" | "places";
 
+function isTopic(t: unknown): t is Topic {
+  return typeof t === "string" && ["info", "events", "places"].includes(t);
+}
+
 export const Route = createFileRoute("/collection/$godName")({
   loader: async ({ params }) => {
     try {
       const response = await ky.get(`/api/gods/${params.godName}`);
 
       const { data } = (await response.json()) as Result<GodPageInfo>;
+      const serializeDetailsPromise = serialize(data.description || "");
+      const serializePlacesPromise = serialize(data.places || "");
 
-      console.log("data is in here ", data);
-
-      const serializePromise = serialize(data.description || "");
-
-      return { ...data, detailsPromise: defer(serializePromise) };
+      return {
+        ...data,
+        detailsPromise: defer(serializeDetailsPromise),
+        placesPromise: defer(serializePlacesPromise),
+      };
     } catch (err) {
       throw notFound();
     }
@@ -51,13 +59,7 @@ export const Route = createFileRoute("/collection/$godName")({
   validateSearch: (search: Record<string, unknown>): { topic: Topic } => {
     const topic = search?.topic;
 
-    if (!topic) {
-      return {
-        topic: "info",
-      };
-    }
-
-    if (!["info", "places", "events"].includes(topic as any)) {
+    if (!isTopic(topic)) {
       return {
         topic: "info",
       };
@@ -123,13 +125,30 @@ export const Route = createFileRoute("/collection/$godName")({
             {topic === "events" && (
               <Await
                 promise={god.detailsPromise}
-                fallback={<span>parsing...</span>}
+                fallback={
+                  <div className="grid gap-10">
+                    <Skeleton className="w-3/4 h-10" />
+                    <Skeleton className="w-full h-32" />
+                  </div>
+                }
               >
-                {(source) => <Details mdxSource={source} />}
+                {(source) => <Markdown mdxSource={source} />}
+              </Await>
+            )}
+            {topic === "places" && (
+              <Await
+                promise={god.placesPromise}
+                fallback={
+                  <div className="grid gap-10">
+                    <Skeleton className="w-3/4 h-10" />
+                    <Skeleton className="w-full h-32" />
+                  </div>
+                }
+              >
+                {(source) => <Markdown mdxSource={source} />}
               </Await>
             )}
           </ScrollArea>
-          {/* <p className="text-2xl text-justify">{god.description}</p> */}
         </div>
 
         <div className="flex flex-col gap-2 w-16">

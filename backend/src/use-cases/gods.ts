@@ -39,6 +39,7 @@ export async function getGod(name: God["name"]) {
         prevName: res.prev_name,
         nextName: res.next_name,
         information: res.information,
+        places: res.places,
       };
     });
 
