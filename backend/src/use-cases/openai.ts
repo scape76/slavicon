@@ -40,7 +40,7 @@ export async function ask(
     cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "llama3.2:3b",
+      model: process.env.MODEL_NAME!,
       messages: [
         ...context.map((m) => ({ role: m.from, content: m.body })),
         { role: "user", content: message },
