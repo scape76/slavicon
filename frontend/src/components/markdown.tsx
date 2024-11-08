@@ -16,7 +16,7 @@ const components = {
 
 export function Markdown({ mdxSource }: MarkdownProps) {
   return (
-    <article className="prose dark:prose-invert prose-neutral max-w-none">
+    <article className="prose dark:prose-invert prose-neutral prose-sm md:prose-md max-w-none">
       <MDXRemote components={components} {...mdxSource} />
     </article>
   );

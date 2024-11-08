@@ -4,7 +4,7 @@ import { Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/collection")({
   component: () => (
-    <div>
+    <div className="overflow-clip">
       <Header />
       <Outlet />
     </div>
