@@ -1,23 +1,23 @@
 {
-  "name": "project-y",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev:frontend": "cd frontend && pnpm dev",
-    "dev:backend": "cd backend && bun dev",
-    "db:migrate": "cd backend && pnpm db:migrate",
-    "db:generate": "cd backend && pnpm db:generate",
-    "db:studio": "cd backend && pnpm db:studio",
-    "db:seed": "cd backend && pnpm db:seed",
-    "dev:db": "docker compose up -d",
-    "dev": "pnpm run dev:db && concurrently \"pnpm run dev:frontend\" \"pnpm run dev:backend\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^9.0.1"
-  }
+   "name": "project-y",
+   "version": "1.0.0",
+   "description": "",
+   "main": "index.js",
+   "scripts": {
+      "dev:frontend": "cd frontend && pnpm dev",
+      "dev:backend": "cd backend && bun dev",
+      "db:migrate": "cd backend && pnpm db:migrate",
+      "db:generate": "cd backend && pnpm db:generate",
+      "db:studio": "cd backend && pnpm db:studio",
+      "db:seed": "cd backend && pnpm db:seed",
+      "dev:db": "docker compose up -d",
+      "dev": "pnpm run dev:db && concurrently \"pnpm run dev:frontend\" \"pnpm run dev:backend\"",
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "devDependencies": {
+      "concurrently": "^9.0.1"
+   }
 }
