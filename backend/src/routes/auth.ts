@@ -77,7 +77,7 @@ authRouter.get("/google/callback", async (c) => {
     stateCookie !== state ||
     !codeVerifierCookie
   ) {
-    console.log("HELLLO THERE ", state, stateCookie, code, codeVerifierCookie);
+    console.log("STATE", state, stateCookie, code, codeVerifierCookie);
     return c.json(null, 400);
   }
 
@@ -103,7 +103,6 @@ authRouter.get("/google/callback", async (c) => {
         append: true,
       });
 
-      console.log("REDIRECTING");
       return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
     }
 
@@ -124,7 +123,6 @@ authRouter.get("/google/callback", async (c) => {
 
     return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
   } catch (e) {
-    console.log("ERROR", e);
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }
 });
