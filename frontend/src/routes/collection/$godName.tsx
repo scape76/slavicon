@@ -87,8 +87,8 @@ export const Route = createFileRoute("/collection/$godName")({
         <div className="flex flex-col flex-1 overflow-auto gap-4 lg:w-5/12 rounded-md shadow-white-black gradient-border-mask lg:mb-20">
           <div className="flex flex-col xl:flex-row xl:items-end justify-between ">
             <FadeText
-              direction="left"
-              transition={{ delay: 0.4, duration: 0.4 }}
+              direction="down"
+              transition={{ delay: 0.2, duration: 0.4 }}
             >
               <h1 className="text-3xl font-bold">{god.name}</h1>
             </FadeText>
@@ -171,7 +171,7 @@ export const Route = createFileRoute("/collection/$godName")({
             <Link
               to={"/c"}
               search={{ godName: god.name }}
-              className="absolute shadow-inner top-0 right-40% group"
+              className="absolute shadow-inner top-0 right-[40%] group"
             >
               <AskBubbleSmall>
                 <div className="flex gap-1 items-center">
@@ -328,7 +328,7 @@ function TopicSwitcher({ topic, godName }: { topic: Topic; godName: string }) {
   const router = useRouter();
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
-  const btnSize = isTablet ? "icon-md" : "lg";
+  const btnSize = isTablet ? "mdIcon" : "lg";
 
   return (
     <div className="flex flex-col sm:flex-row lg:flex-col gap-2 ">

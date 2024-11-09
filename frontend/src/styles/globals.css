@@ -94,7 +94,7 @@
   --chart-4: 280 65% 60%;
 
   --chart-5: 340 75% 55%;
-  --sidebar-background: 203 50% 3%;
+  --sidebar-background: 202, 50%, 3%, 0.5;
   --sidebar-foreground: 240 4.8% 95.9%;
   --sidebar-primary: 224.3 76.3% 48%;
   --sidebar-primary-foreground: 0 0% 100%;
@@ -132,7 +132,7 @@
     border-radius: 0.375rem;
     border: 1px solid transparent;
     background: linear-gradient(
-        140deg,
+        150deg,
         rgba(252, 15, 192, 0) 14%,
         rgba(150, 9, 115, 0.774) 100%
       )
