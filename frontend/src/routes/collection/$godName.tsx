@@ -168,6 +168,18 @@ export const Route = createFileRoute("/collection/$godName")({
                 className="ml-auto w-[100%] object-cover translate-x-[28%]"
               />
             </BlurFade>
+            <Link
+              to={"/c"}
+              search={{ godName: god.name }}
+              className="absolute shadow-inner top-0 right-40% group"
+            >
+              <AskBubbleSmall>
+                <div className="flex gap-1 items-center">
+                  <p className="text-md text-center w-full">Chat with me</p>
+                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </div>
+              </AskBubbleSmall>
+            </Link>
           </div>
         )}
         {!isTablet && (
@@ -183,9 +195,7 @@ export const Route = createFileRoute("/collection/$godName")({
                 className="w-full h-auto object-cover"
               />
             </BlurFade>
-
             <AskBubble className="absolute -top-[8px] left-2" />
-
             <div className="absolute left-[50%] translate-x-[-50%] bottom-[5rem] flex gap-2">
               <Link
                 from={Route.id}
@@ -222,6 +232,36 @@ export const Route = createFileRoute("/collection/$godName")({
     );
   },
 });
+
+function AskBubbleSmall({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "w-[120px] shadow-lg shadow-white-black gradient-border-mask bg-opacity-50 cursor-pointer relative bg-background rounded-md px-2 py-2",
+        // "after:content-[''] after:absolute after:w-0 after:h-0",
+        // "after:right-0 after:-bottom-[15px]",
+        // "after:border-[10px] after:border-solid",
+        // "after:border-r-background after:border-t-background",
+        // "after:border-b-transparent after:border-l-transparent",
+        className
+      )}
+      style={
+        {
+          "--pulse-color": "purple",
+          "--duration": "1.5s",
+        } as React.CSSProperties
+      }
+      {...props}
+    >
+      <div className="relative z-10">{children}</div>
+      {/* <div className="absolute top-1/2 left-1/2 size-full rounded-lg bg-inherit animate-pulse -translate-x-1/2 -translate-y-1/2"></div> */}
+    </div>
+  );
+}
 
 function AskBubble({ className }: React.ComponentProps<"div">) {
   return (
