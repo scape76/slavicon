@@ -132,7 +132,7 @@ function InputRoom({
             />
             <Button
                variant="ghost"
-               size="sm_icon"
+               size="smIcon"
                className="absolute right-2 top-1/2 transform -translate-y-1/2"
                onClick={() => submit()}
                disabled={isPending}

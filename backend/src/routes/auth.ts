@@ -77,6 +77,7 @@ authRouter.get("/google/callback", async (c) => {
     stateCookie !== state ||
     !codeVerifierCookie
   ) {
+    console.log("STATE", state, stateCookie, code, codeVerifierCookie);
     return c.json(null, 400);
   }
 
@@ -102,7 +103,7 @@ authRouter.get("/google/callback", async (c) => {
         append: true,
       });
 
-      return c.redirect(process.env.BASE_FRONTEND_URL!);
+      return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
     }
 
     const userId = generateIdFromEntropySize(10);
@@ -126,7 +127,7 @@ authRouter.get("/google/callback", async (c) => {
   }
 });
 
-authRouter.post("/logout", async (c) => {
+authRouter.get("/logout", async (c) => {
   const sessionId = getCookie(c, lucia.sessionCookieName) ?? null;
 
   if (!sessionId) {
@@ -136,6 +137,7 @@ authRouter.post("/logout", async (c) => {
   await lucia.invalidateSession(sessionId);
   const sessionCookie = lucia.createBlankSessionCookie();
   setCookie(c, lucia.sessionCookieName, sessionCookie.serialize());
+  console.log("LOGGED OUT");
   return c.json(null, 200);
 });
 
