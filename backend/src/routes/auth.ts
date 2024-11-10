@@ -37,11 +37,16 @@ authRouter.get("/user", async (c) => {
 });
 
 authRouter.get("/google", async (c) => {
+  console.log("HIT AUTH GOOGLE");
+
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
-  const url = await google.createAuthorizationURL(state, codeVerifier, {
-    scopes: ["email", "profile"],
-  });
+  const url = google.createAuthorizationURL(state, codeVerifier, [
+    "email",
+    "profile",
+  ]);
+
+  console.log(state, codeVerifier);
 
   setCookie(c, "google_oauth_state", state, {
     path: "/",
@@ -88,7 +93,7 @@ authRouter.get("/google/callback", async (c) => {
     );
     const userInfoResponse = await fetch(
       "https://openidconnect.googleapis.com/v1/userinfo",
-      { headers: { Authorization: `Bearer ${tokens.accessToken}` } }
+      { headers: { Authorization: `Bearer ${tokens.accessToken()}` } }
     );
     const user = await userInfoResponse.json();
 
@@ -123,6 +128,7 @@ authRouter.get("/google/callback", async (c) => {
 
     return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
   } catch (e) {
+    console.log("ERROR", e);
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }
 });

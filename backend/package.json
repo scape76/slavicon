@@ -11,21 +11,21 @@
     "db:seed": "bun scripts/seed.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.1.13",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.24.2"
+    "drizzle-kit": "^0.28.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.1.0",
-    "arctic": "^1.9.2",
-    "drizzle-orm": "^0.33.0",
-    "hono": "^4.6.5",
-    "lucia": "^3.2.0",
-    "openai": "^4.67.3",
+    "arctic": "^2.2.2",
+    "drizzle-orm": "^0.36.1",
+    "hono": "^4.6.9",
+    "lucia": "^3.2.2",
+    "openai": "^4.71.1",
     "oslo": "^1.2.1",
-    "pg": "^8.13.0"
+    "pg": "^8.13.1"
   }
 }
