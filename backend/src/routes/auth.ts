@@ -37,16 +37,12 @@ authRouter.get("/user", async (c) => {
 });
 
 authRouter.get("/google", async (c) => {
-  console.log("HIT AUTH GOOGLE");
-
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
   const url = google.createAuthorizationURL(state, codeVerifier, [
     "email",
     "profile",
   ]);
-
-  console.log(state, codeVerifier);
 
   setCookie(c, "google_oauth_state", state, {
     path: "/",
