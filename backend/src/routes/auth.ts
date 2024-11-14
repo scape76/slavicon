@@ -16,6 +16,7 @@ const authRouter = new Hono();
 
 authRouter.get("/user", async (c) => {
   const result = await validateSession(c);
+  console.log(getCookie(c));
 
   if (!result) {
     return c.json({ user: null }, 200);
@@ -63,7 +64,7 @@ authRouter.get("/google", async (c) => {
   return c.redirect(url.toString());
 });
 
-authRouter.get("/google/callback", async (c) => {
+authRouter.get("/callback/google", async (c) => {
   const stateCookie = getCookie(c, "google_oauth_state") ?? null;
   const codeVerifierCookie = getCookie(c, "code_verifier") ?? null;
 

@@ -6,7 +6,7 @@ import { Google } from "arctic";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
-export const GOOGLE_AUTH_CALLBACK_URL = `${process.env.BASE_URL}/auth/google/callback`;
+export const GOOGLE_AUTH_CALLBACK_URL = `${process.env.BASE_URL}/auth/callback/google`;
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
