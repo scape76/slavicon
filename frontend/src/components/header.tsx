@@ -22,10 +22,13 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
         className
       )}
     >
-      {toggleSidebar}
-      <Link to="/" className="text-lg sm:text-3xl font-bold">
-        Slavicón
-      </Link>
+      <div className="flex items-center gap-2 xl:gap-4">
+         {toggleSidebar}
+         <Link to="/" className="text-lg sm:text-3xl font-bold">
+         Slavicón
+         </Link>
+      </div>
+      
       <Await
         promise={userPromise}
         fallback={
