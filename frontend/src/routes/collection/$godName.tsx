@@ -31,6 +31,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Switcher, Switchers } from "@/components/switchers";
 import { api } from "@/lib/api";
+import { TempleIcon } from "@/components/icons";
 
 type GodPageInfo = God & {
   prevName: string;
@@ -374,7 +375,7 @@ function TopicSwitcher({ topic, godName }: { topic: Topic; godName: string }) {
           })
         }
       >
-        <Castle />
+        <TempleIcon className="size-6" />
       </Button>
     </div>
   );
