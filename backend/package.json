@@ -5,9 +5,11 @@
   "scripts": {
     "finetune": "bun --env-file=.env fine-tuning/index.ts",
     "dev": "bun run --watch src/index.ts",
+    "build": "bun build ./src/index.ts --outdir ./out --target bun",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
+    "prod:seed": "bun --env-file=.env.prod scripts/seed.ts",
     "db:seed": "bun scripts/seed.ts"
   },
   "devDependencies": {
