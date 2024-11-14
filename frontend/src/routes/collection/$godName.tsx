@@ -30,6 +30,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Switcher, Switchers } from "@/components/switchers";
+import { api } from "@/lib/api";
 
 type GodPageInfo = God & {
   prevName: string;
@@ -45,7 +46,7 @@ function isTopic(t: unknown): t is Topic {
 export const Route = createFileRoute("/collection/$godName")({
   loader: async ({ params }) => {
     try {
-      const response = await ky.get(`/api/gods/${params.godName}`);
+      const response = await api.get(`gods/${params.godName}`);
 
       const { data } = (await response.json()) as Result<GodPageInfo>;
       const serializeDetailsPromise = serialize(data.description || "");
@@ -187,7 +188,7 @@ export const Route = createFileRoute("/collection/$godName")({
             <BlurFade
               delay={0.3}
               yOffset={0}
-              className="flex justify-center absolute -z-[1] bottom-0 h-full"
+              className="flex justify-center w-full absolute -z-[1] bottom-0 h-full"
             >
               <img
                 src={god.image}

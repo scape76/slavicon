@@ -16,8 +16,6 @@ const authRouter = new Hono();
 
 authRouter.get("/user", async (c) => {
   const result = await validateSession(c);
-  console.log(process.env.NODE_ENV);
-  // console.log(getCookie(c));
 
   if (!result) {
     return c.json({ user: null }, 200);
@@ -80,7 +78,6 @@ authRouter.get("/callback/google", async (c) => {
     stateCookie !== state ||
     !codeVerifierCookie
   ) {
-    console.log("STATE", state, stateCookie, code, codeVerifierCookie);
     return c.json(null, 400);
   }
 
@@ -126,7 +123,6 @@ authRouter.get("/callback/google", async (c) => {
 
     return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
   } catch (e) {
-    console.log("ERROR", e);
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }
 });
@@ -141,7 +137,6 @@ authRouter.get("/logout", async (c) => {
   await lucia.invalidateSession(sessionId);
   const sessionCookie = lucia.createBlankSessionCookie();
   setCookie(c, lucia.sessionCookieName, sessionCookie.serialize());
-  console.log("LOGGED OUT");
   return c.json(null, 200);
 });
 
