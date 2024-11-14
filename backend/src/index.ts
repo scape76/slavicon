@@ -10,8 +10,9 @@ const app = new Hono();
 app.use(
   "*",
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "https://slavicon.vercel.app"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
   })
 );
 

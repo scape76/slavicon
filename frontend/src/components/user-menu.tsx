@@ -12,12 +12,13 @@ import { ExitIcon } from "@radix-ui/react-icons";
 import { Loader2, MessageSquareIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import ky from "ky";
+import { api } from "@/lib/api";
 
 export function UserMenu({ user }: { user: User }) {
   const router = useRouter();
 
   const { mutate: logout, status } = useMutation({
-    mutationFn: () => ky.get("/api/auth/logout").json(),
+    mutationFn: () => api.get("auth/logout").json(),
     onSuccess: () => {
       router.invalidate();
     },
