@@ -81,11 +81,11 @@ export const Route = createFileRoute("/collection/$godName")({
 
     const router = useRouter();
 
-    const isTablet = useMediaQuery("(max-width: 1024px)");
+    const isTablet = useMediaQuery("(max-width: 1280px)");
 
     return (
-      <section className="container h-[calc(100vh-var(--header-height))] flex flex-col-reverse lg:flex-row gap-4 pb-8 pl-[1.5rem] lg:pr-0">
-        <div className="flex flex-col flex-1 overflow-auto gap-4 lg:w-5/12 rounded-md shadow-white-black gradient-border-mask lg:mb-20">
+      <section className="container h-[calc(100vh-var(--header-height))] flex flex-col-reverse xl:flex-row gap-4 pb-8 pl-[1.5rem] xl:pr-0">
+        <div className="flex flex-col flex-1 overflow-auto gap-4 xl:w-5/12 rounded-md shadow-white-black gradient-border-mask xl:mb-20">
           <div className="flex flex-col xl:flex-row xl:items-end justify-between ">
             <FadeText
               direction="down"
@@ -169,10 +169,11 @@ export const Route = createFileRoute("/collection/$godName")({
                 className="ml-auto w-[100%] object-cover translate-x-[28%]"
               />
             </BlurFade>
+            <AskBubble className="absolute -top-[8px] right-[350px] hidden lg:flex"></AskBubble>
             <Link
               to={"/c"}
               search={{ godName: god.name }}
-              className="absolute shadow-inner top-0 right-[40%] group"
+              className="absolute shadow-inner top-0 right-[40%] group lg:hidden"
             >
               <AskBubbleSmall>
                 <div className="flex gap-1 items-center">
@@ -188,7 +189,7 @@ export const Route = createFileRoute("/collection/$godName")({
             <BlurFade
               delay={0.3}
               yOffset={0}
-              className="flex justify-center w-full absolute -z-[1] bottom-0 h-full"
+              className="flex justify-center absolute -z-[1] bottom-0 h-full xl:h-auto"
             >
               <img
                 src={god.image}
@@ -268,7 +269,7 @@ function AskBubble({ className }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "bg-[url('/background/question.png')] flex flex-col bg-no-repeat p-6 lg:pt-9 w-[300px] h-[160px]  lg:w-[342px] items-center gap-4 lg:h-[208px]  bg-contain",
+        "bg-[url('/background/question.png')] flex flex-col bg-no-repeat pl-2 pr-7 lg:pt-7 w-[300px] h-[160px] lg:w-[342px] items-center gap-4 lg:h-[208px]  bg-contain",
         className
       )}
     >
@@ -298,7 +299,7 @@ function AskBubble({ className }: React.ComponentProps<"div">) {
 function NotFound() {
   return (
     <section className="container h-[calc(100vh-var(--header-height))] flex flex-col items-center justify-center gap-8">
-      <div className="flex flex-col gap-4 w-1/2 pt-8 px-9 pb-7 rounded-md shadow-white-black gradient-border-mask text-center">
+      <div className="flex flex-col gap-4 w-1/2 pt-8 px-9 pb-7 rounded-md shadow-white-black gradient-border-mtext-center">
         <FadeText direction="down" transition={{ delay: 0.2, duration: 0.4 }}>
           <h1 className="text-5xl font-bold mb-4">Divine Mystery</h1>
         </FadeText>

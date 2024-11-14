@@ -23,14 +23,14 @@ export function Switcher({
       className={cn(
         "py-4 relative group",
         className,
-        "after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-neutral-300 after:opacity-0 hover:after:opacity-30 after:transition-opacity"
+        "after:absolute after:bottom-2 after:left-[50%] after:-translate-x-[50%] after:w-[80%] after:h-1 after:rounded-sm after:bg-neutral-300 after:opacity-0 hover:after:opacity-30 after:transition-opacity"
       )}
       {...props}
     >
       <div
-        className={cn(`w-16 h-1 rounded-md bg-neutral-300 transition-opacity`, {
-          "opacity-100": active,
-          "opacity-55": !active,
+        className={cn(` h-1 rounded-md bg-neutral-300 transition-opacity`, {
+          "opacity-100 w-16": active,
+          "opacity-55 w-14": !active,
         })}
       />
     </button>
