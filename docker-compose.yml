@@ -1,6 +1,30 @@
 version: "3.9"
 
 services:
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     - postgres
+  #   links:
+  #     - postgres
+  #   environment:
+  #     - DATABASE_URL=postgresql://neondb_owner:9peqRvwO4EUi@ep-gentle-meadow-a28wksv1.eu-central-1.aws.neon.tech/neondb?sslmode=require
+  #   networks:
+  #     - app-network
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - VITE_API_URL=http://backend:3001
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - app-network
+
   postgres:
     image: postgres
     restart: always
@@ -13,6 +37,11 @@ services:
       - 5432:5432
     volumes:
       - postgres:/data/postgres
+    # networks:
+    #   - app-network
+
+# networks:
+#   app-network:
 
 volumes:
   postgres:

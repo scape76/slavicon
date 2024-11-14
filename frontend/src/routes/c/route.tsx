@@ -35,6 +35,7 @@ import {
    TooltipTrigger,
    TooltipProvider,
 } from "@/components/ui/tooltip";
+import { api } from "@/lib/api";
 
 type Chat = {
    id: string;
@@ -44,7 +45,7 @@ type Chat = {
 
 export const Route = createFileRoute("/c")({
    loader: async () => {
-      const data: Result<Chat[] | null> = await ky.get("/api/chats").json();
+      const data: Result<Chat[] | null> = await api.get("chats").json();
 
       return data;
    },

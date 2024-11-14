@@ -4,18 +4,17 @@ import { Link, Outlet, createRootRoute, defer } from "@tanstack/react-router";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import ky from "ky";
+import { api } from "@/lib/api";
 // will need to sync types with backend
 
 const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   loader: () => {
-    const userPromise: Promise<LoaderData> = ky.get("/api/auth/user").json();
-
-    return {
-      userPromise: defer(userPromise),
-    };
+    // const userPromise: Promise<LoaderData> = api.get("api/auth/user").json();
+    // return {
+    //   userPromise: defer(userPromise),
+    // };
   },
   // never revalidate (basically infinite cache time)
   staleTime: Infinity,
@@ -26,7 +25,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <TanStackRouterDevtools position="bottom-right" />
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools position="bottom-right" />
+      )}
     </QueryClientProvider>
   );
 }

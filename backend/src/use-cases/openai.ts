@@ -38,6 +38,7 @@ export async function ask(
   const res = await fetch("http://localhost:11434/api/chat", {
     method: "POST",
     cache: "no-store",
+
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       model: process.env.MODEL_NAME!,

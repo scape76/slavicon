@@ -4,11 +4,13 @@
   "type": "module",
   "scripts": {
     "finetune": "bun --env-file=.env fine-tuning/index.ts",
+    "build": "bun build ./src/index.ts --outdir ./out --target bun",
     "dev": "bun run --watch src/index.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "bun scripts/seed.ts"
+    "db:seed": "bun scripts/seed.ts",
+    "prod:seed": "bun --env-file=.env.prod scripts/seed.ts"
   },
   "devDependencies": {
     "@types/bun": "^1.1.13",
@@ -21,6 +23,7 @@
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "arctic": "^2.2.2",
+    "better-auth": "0.8.3-beta.5",
     "drizzle-orm": "^0.36.1",
     "hono": "^4.6.9",
     "lucia": "^3.2.2",

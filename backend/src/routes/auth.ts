@@ -78,7 +78,6 @@ authRouter.get("/google/callback", async (c) => {
     stateCookie !== state ||
     !codeVerifierCookie
   ) {
-    console.log("STATE", state, stateCookie, code, codeVerifierCookie);
     return c.json(null, 400);
   }
 
@@ -100,9 +99,12 @@ authRouter.get("/google/callback", async (c) => {
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
+
       c.header("Set-Cookie", sessionCookie.serialize(), {
         append: true,
       });
+      // setCookie(c, lucia.sessionCookieName, sessionCookie.value);
+      // console.log("setting to ", sessionCookie.value)
 
       return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
     }
@@ -118,13 +120,14 @@ authRouter.get("/google/callback", async (c) => {
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    c.header("Set-Cookie", sessionCookie.serialize(), {
+
+    /*     c.header("Set-Cookie", sessionCookie.serialize(), {
       append: true,
-    });
+    }); */
+    setCookie(c, lucia.sessionCookieName, sessionCookie.value);
 
     return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
   } catch (e) {
-    console.log("ERROR", e);
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }
 });
@@ -139,7 +142,7 @@ authRouter.get("/logout", async (c) => {
   await lucia.invalidateSession(sessionId);
   const sessionCookie = lucia.createBlankSessionCookie();
   setCookie(c, lucia.sessionCookieName, sessionCookie.serialize());
-  console.log("LOGGED OUT");
+
   return c.json(null, 200);
 });
 

@@ -6,6 +6,7 @@ import { Route } from "../routes/__root";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2 } from "lucide-react";
 import { UserMenu } from "./user-menu";
+import { authClient } from "@/lib/auth";
 
 interface HeaderProps {
   toggleSidebar?: React.ReactNode;
@@ -13,7 +14,18 @@ interface HeaderProps {
 }
 
 export function Header({ toggleSidebar, className }: HeaderProps) {
-  const { userPromise } = Route.useLoaderData();
+  // const { userPromise } = Route.useLoaderData();
+  const { data: session, isPending, error } = authClient.useSession();
+
+  console.log("SESSION ", session);
+
+  const signin = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+
+    console.log("data is ", data);
+  };
 
   return (
     <header
@@ -26,36 +38,23 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
       <Link to="/" className="text-lg sm:text-3xl font-bold">
         Slavicón
       </Link>
-      <Await
-        promise={userPromise}
-        fallback={
-          <Avatar>
-            <AvatarFallback>
-              <Loader2 className="animate-spin" />
-            </AvatarFallback>
-          </Avatar>
-        }
+      {/* <Avatar>
+        <AvatarFallback>
+          <Loader2 className="animate-spin" />
+        </AvatarFallback>
+      </Avatar> */}
+      <button
+        onClick={signin}
+        // href={`${import.meta.env.VITE_API_URL}/auth/google` as any}
+        className={cn(
+          buttonVariants({
+            variant: "link",
+            className: "text-sm sm:text-base font-medium text-foreground",
+          })
+        )}
       >
-        {function (data) {
-          if (data?.user) {
-            return <UserMenu user={data.user} />;
-          }
-
-          return (
-            <a
-              href={`${import.meta.env.VITE_API_URL}/auth/google` as any}
-              className={cn(
-                buttonVariants({
-                  variant: "link",
-                  className: "text-sm sm:text-base font-medium text-foreground",
-                })
-              )}
-            >
-              Sign in
-            </a>
-          );
-        }}
-      </Await>
+        Sign in
+      </button>
     </header>
   );
 }
