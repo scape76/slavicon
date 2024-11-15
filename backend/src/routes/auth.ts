@@ -43,6 +43,7 @@ authRouter.get("/google", async (c) => {
     "email",
     "profile",
   ]);
+  const fromHref = c.req.query("from") ?? "/";
 
   setCookie(c, "google_oauth_state", state, {
     path: "/",
@@ -60,12 +61,21 @@ authRouter.get("/google", async (c) => {
     sameSite: "lax",
   });
 
+  setCookie(c, "redirect_href", fromHref, {
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 60 * 10,
+    sameSite: "lax",
+  });
+
   return c.redirect(url.toString());
 });
 
 authRouter.get("/callback/google", async (c) => {
   const stateCookie = getCookie(c, "google_oauth_state") ?? null;
   const codeVerifierCookie = getCookie(c, "code_verifier") ?? null;
+  const redirectHref = getCookie(c, "redirect_href") ?? "/";
 
   const url = new URL(c.req.url);
   const state = url.searchParams.get("state");
@@ -80,6 +90,8 @@ authRouter.get("/callback/google", async (c) => {
   ) {
     return c.json(null, 400);
   }
+
+  const redirectUrl = `${process.env.BASE_FRONTEND_URL}${redirectHref}`;
 
   try {
     const tokens = await google.validateAuthorizationCode(
@@ -103,7 +115,7 @@ authRouter.get("/callback/google", async (c) => {
         append: true,
       });
 
-      return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
+      return c.redirect(redirectUrl, 302);
     }
 
     const userId = generateIdFromEntropySize(10);
@@ -121,7 +133,7 @@ authRouter.get("/callback/google", async (c) => {
       append: true,
     });
 
-    return c.redirect(process.env.BASE_FRONTEND_URL!, 302);
+    return c.redirect(redirectUrl, 302);
   } catch (e) {
     return c.json(null, e instanceof OAuth2RequestError ? 400 : 500);
   }

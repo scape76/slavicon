@@ -1,4 +1,4 @@
-import { Await, Link } from "@tanstack/react-router";
+import { Await, Link, useRouter } from "@tanstack/react-router";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Route } from "../routes/__root";
@@ -15,6 +15,10 @@ interface HeaderProps {
 export function Header({ toggleSidebar, className }: HeaderProps) {
   const { userPromise } = Route.useLoaderData();
 
+  const router = useRouter();
+
+  console.log(router.state.location.href);
+
   return (
     <header
       className={cn(
@@ -23,12 +27,12 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
       )}
     >
       <div className="flex items-center gap-2 xl:gap-4">
-         {toggleSidebar}
-         <Link to="/" className="text-lg sm:text-3xl font-bold">
-         Slavicón
-         </Link>
+        {toggleSidebar}
+        <Link to="/" className="text-lg sm:text-3xl font-bold">
+          Slavicón
+        </Link>
       </div>
-      
+
       <Await
         promise={userPromise}
         fallback={
@@ -46,7 +50,9 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
 
           return (
             <a
-              href={`${import.meta.env.VITE_API_URL}/auth/google` as any}
+              href={
+                `${import.meta.env.VITE_API_URL}/auth/google?from=${router.state.location.href}` as any
+              }
               className={cn(
                 buttonVariants({
                   variant: "link",

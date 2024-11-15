@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { Switcher, Switchers } from "@/components/switchers";
 import { api } from "@/lib/api";
 import { TempleIcon } from "@/components/icons";
+import { GodName } from "../c";
 
 type GodPageInfo = God & {
   prevName: string;
@@ -168,7 +169,7 @@ function Component() {
           <AskBubble className="absolute -top-[8px] right-[350px] hidden lg:flex"></AskBubble>
           <Link
             to={"/c"}
-            search={{ godName: god.name }}
+            search={{ godName: god.name as GodName }}
             className="absolute shadow-inner top-0 right-[40%] group lg:hidden"
           >
             <AskBubbleSmall>
@@ -261,6 +262,8 @@ function AskBubbleSmall({
 }
 
 function AskBubble({ className }: React.ComponentProps<"div">) {
+  const { name } = Route.useLoaderData();
+
   return (
     <div
       className={cn(
@@ -275,6 +278,9 @@ function AskBubble({ className }: React.ComponentProps<"div">) {
       </FadeText>
       <Link
         to="/c"
+        search={{
+          godName: name as GodName,
+        }}
         className="group text-muted-foreground hover:text-accent-foreground focus:text-accent-foreground transition-colors duration-300 active:text-accent-foreground lg:text-xl flex flex-col"
       >
         <FadeText

@@ -1,6 +1,5 @@
-import { Header } from "@/components/header";
 import { LoaderData } from "@/types";
-import { Link, Outlet, createRootRoute, defer } from "@tanstack/react-router";
+import { Outlet, createRootRoute, defer } from "@tanstack/react-router";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";

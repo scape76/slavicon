@@ -2,13 +2,14 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { ChevronLeft, Loader2, MessageSquarePlus, Send } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Await, createFileRoute, useRouter } from "@tanstack/react-router";
+import { Loader2, MessageSquarePlus, Send } from "lucide-react";
+import { useState } from "react";
 import { MessageList } from "@/components/message-list";
 import { MessageInput } from "@/components/message-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/lib/api";
+import { Route as IndexRoute } from "../__root";
 
 type Chat = {
   id: string;
@@ -16,7 +17,29 @@ type Chat = {
   updatedAt: string;
 };
 
+export type GodName = "veles" | "perun" | "dazhbog";
+
+function isGodName(n: unknown): n is GodName {
+  return (
+    typeof n === "string" &&
+    ["veles", "perun", "dazhbog"].includes(n.toLowerCase())
+  );
+}
+
 export const Route = createFileRoute("/c/")({
+  validateSearch: (search: Record<string, unknown>): { godName: GodName } => {
+    const godName = search?.godName;
+
+    if (!isGodName(godName)) {
+      return {
+        godName: "veles",
+      };
+    }
+
+    return {
+      godName: godName,
+    };
+  },
   component: Chat,
 });
 
@@ -30,19 +53,29 @@ function Chat() {
   const { isPending, mutate } = useMutation({
     mutationFn: async (message: string) => {
       // const response = await fetch("/api/chats", {
-      //    method: "POST",
-      //    headers: {
-      //       "Content-Type": "application/json",
-      //    },
-      //    body: JSON.stringify({ message, godName: "Veles" }),
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   credentials: "include",
+      //   body: JSON.stringify({ message, godName: "Veles" }),
       // });
 
+      console.log("sending response !");
       const response = await api.post("chats", {
         body: JSON.stringify({
           message,
           godName: "Veles",
         }),
       });
+
+      console.log("status is ", response.statusText);
+
+      if (response.status === 403) {
+        router.navigate({
+          to: import.meta.env.VITE_API_URL + "/auth/google",
+        });
+      }
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -106,6 +139,9 @@ function InputRoom({
   sendMessage: (message: string) => void;
   isPending: boolean;
 }) {
+  const { userPromise } = IndexRoute.useLoaderData();
+  const { godName } = Route.useSearch();
+
   const [input, setInput] = useState("");
 
   const submit = () => {
@@ -117,38 +153,49 @@ function InputRoom({
 
   return (
     <>
-      <h1 className="text-lg md:text-3xl">Chat with me</h1>
+      <h1 className="text-lg md:text-3xl">Chat with {godName}</h1>
       <div className="relative w-full">
-        <Input
-          autoFocus
-          placeholder="Message Veles"
-          disabled={false}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (e.shiftKey) {
-                setInput((prev) => prev + "\r\n");
-              } else {
-                e.preventDefault();
-                return submit();
-              }
-            }
+        <Await promise={userPromise}>
+          {({ user }) => {
+            return (
+              <>
+                <Input
+                  // feels kinda awkward to have autofocus on mobile
+                  autoFocus={window.innerWidth >= 1024}
+                  placeholder={
+                    user ? `Message ${godName}` : `Login to message ${godName}`
+                  }
+                  disabled={!user}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      if (e.shiftKey) {
+                        setInput((prev) => prev + "\r\n");
+                      } else {
+                        e.preventDefault();
+                        return submit();
+                      }
+                    }
+                  }}
+                />
+                <Button
+                  variant="ghost"
+                  size="smIcon"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() => submit()}
+                  disabled={isPending || !user}
+                >
+                  {isPending ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <Send className="size-5" />
+                  )}
+                </Button>
+              </>
+            );
           }}
-        />
-        <Button
-          variant="ghost"
-          size="smIcon"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2"
-          onClick={() => submit()}
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Loader2 className="size-5 animate-spin" />
-          ) : (
-            <Send className="size-5" />
-          )}
-        </Button>
+        </Await>
       </div>
     </>
   );
