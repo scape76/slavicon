@@ -86,7 +86,7 @@ function Component() {
   const isTablet = useMediaQuery("(max-width: 1280px)");
 
   return (
-    <section className="container h-[calc(100vh-var(--header-height))] flex flex-col-reverse xl:flex-row gap-4 pb-8 pl-[1.5rem] xl:pr-0">
+    <section className="container h-[calc(100dvh-var(--header-height))] flex flex-col-reverse xl:flex-row gap-4 pb-8 pl-[1.5rem] xl:pr-0">
       <div className="flex flex-col flex-1 overflow-auto gap-4 xl:w-5/12 rounded-md shadow-white-black gradient-border-mask xl:mb-20">
         <div className="flex flex-col xl:flex-row xl:items-end justify-between ">
           <FadeText direction="down" transition={{ delay: 0.2, duration: 0.4 }}>
@@ -293,7 +293,7 @@ function AskBubble({ className }: React.ComponentProps<"div">) {
 
 function NotFound() {
   return (
-    <section className="container h-[calc(100vh-var(--header-height))] flex flex-col items-center justify-center gap-8">
+    <section className="container h-[calc(100dvh-var(--header-height))] flex flex-col items-center justify-center gap-8">
       <div className="flex flex-col gap-4 w-1/2 pt-8 px-9 pb-7 rounded-md shadow-white-black gradient-border-mtext-center">
         <FadeText direction="down" transition={{ delay: 0.2, duration: 0.4 }}>
           <h1 className="text-5xl font-bold mb-4">Divine Mystery</h1>

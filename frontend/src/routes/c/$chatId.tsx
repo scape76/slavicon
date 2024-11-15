@@ -152,7 +152,7 @@ function Chat() {
 
 function ChatNotFound() {
   return (
-    <div className="h-[calc(100vh-45px)] flex flex-col items-center justify-center gap-4">
+    <div className="h-[calc(100dvh-45px)] flex flex-col items-center justify-center gap-4">
       <h1 className="text-4xl font-bold">Chat Not Found</h1>
       <p>The chat you are looking for does not exist.</p>
       <Link to="/c" className={cn(buttonVariants({ variant: "outline" }))}>
