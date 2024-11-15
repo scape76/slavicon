@@ -212,7 +212,7 @@ function FakeRoom({
 }) {
   return (
     <div className="mx-4 h-full flex flex-col">
-      <div className="relative max-w-3xl mx-auto gap-4 h-full flex-1 flex flex-col">
+      <div className="relative w-full max-w-5xl mx-auto gap-4 h-full flex-1 flex flex-col">
         <ScrollArea
           className="flex-1 pr-4"
           viewportClassName="h-full flex flex-col justify-end"

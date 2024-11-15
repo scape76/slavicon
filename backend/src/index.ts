@@ -7,16 +7,23 @@ import { godsRouter } from "./routes/gods";
 
 const app = new Hono();
 
+const origins = ["http://localhost:3000", "https://slavicon.vercel.app"];
+
 app.use(
   "*",
   cors({
-    origin: ["http://localhost:3000", "https://slavicon.vercel.app"],
+    origin: origins,
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
 
-app.use("*", csrf());
+app.use(
+  "*",
+  csrf({
+    origin: origins,
+  })
+);
 
 app.route("/auth", authRouter);
 app.route("/chats", chatsRouter);

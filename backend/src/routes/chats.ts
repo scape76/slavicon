@@ -48,8 +48,6 @@ chatsRouter.post("/", async (c) => {
 
   const { message, godName } = await c.req.json();
 
-  console.log(message, godName);
-
   if (!message) {
     return c.json({ error: "Message is required" }, 400);
   }
@@ -61,8 +59,6 @@ chatsRouter.post("/", async (c) => {
       message,
     });
 
-    console.log("data ", data);
-
     const chatId = data.chat.id;
 
     const streamData = await ask(message);
@@ -72,20 +68,20 @@ chatsRouter.post("/", async (c) => {
       return;
     }
 
-    console.log("stream");
-
     const decoder = new TextDecoder();
 
     let buffer = "";
     while (true) {
       const { done, value } = await reader.read();
 
-      if (done) break;
+      if (done || !value) break;
 
-      const json = decoder.decode(value ?? new Uint8Array(), { stream: true });
+      const json = decoder.decode(value, { stream: true });
+
       for (const line of json.split("\n")) {
         if (line.trim() === "") continue;
 
+        console.log("line is ", line);
         const body = JSON.parse(line);
 
         const text = body.message.content;
@@ -93,7 +89,7 @@ chatsRouter.post("/", async (c) => {
         buffer += text;
 
         await stream.write("r" + text);
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
 
