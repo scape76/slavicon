@@ -86,13 +86,20 @@ const GodsCarousel: React.FC<PropType> = (props) => {
             });
           }
 
+          const DEFAULT_SCALE = 1.2;
+
           const tweenScaleValue =
-            1 - Math.abs(diffToTarget * tweenScaleFactor.current);
+            DEFAULT_SCALE - Math.abs(diffToTarget * tweenScaleFactor.current);
 
           const tweenOpacityValue =
             1 - Math.abs(diffToTarget * tweenOpacityFactor.current);
 
-          const scale = numberWithinRange(tweenScaleValue, 0, 1).toString();
+          const scale = numberWithinRange(
+            tweenScaleValue,
+            0,
+            DEFAULT_SCALE
+          ).toString();
+          console.log("scale", scale);
           const opacity = numberWithinRange(tweenOpacityValue, 0, 1);
 
           const tweenNode = tweenNodes.current[slideIndex];
@@ -126,19 +133,25 @@ const GodsCarousel: React.FC<PropType> = (props) => {
         <div className="embla__container h-full">
           {[...collection, ...collection].map((god, i) => (
             <div
-              className="embla__slide h-full flex-[0_0_100%] sm:flex-[0_0_60%] lg:flex-[0_0_33%]"
+              className="embla__slide h-full flex-[0_0_100%] sm:flex-[0_0_70%] md:flex-[0_0_65%] lg:flex-[0_0_50%] xl:flex-[0_0_35%]"
               key={god.name + i}
             >
-              <div className="embla__slide__number flex-col items-center text-center h-full relative">
-                <div className="flex flex-col gap-2 absolute top-0 left-[50%] -translate-x-[50%]">
-                  <h2 className="text-3xl md:text-4xl">{god.name}</h2>
-                  <h3 className="text-xl md:text-3xl text-muted-foreground">
-                    {god.knownAs}
-                  </h3>
+              <div className="relative">
+                <div className="embla__slide__number flex-col items-center text-center h-full relative">
+                  <div className="flex flex-col gap-2 absolute top-24 left-[50%] -translate-x-[50%]">
+                    <h2 className="text-2xl lg:text-3xl">{god.name}</h2>
+                    <h3 className="text-lg lg:text-2xl text-muted-foreground">
+                      {god.knownAs}
+                    </h3>
+                  </div>
+                  <Link to={`/collection/${god.name}`}>
+                    <img
+                      src={god.image}
+                      alt={god.name}
+                      className="max-h-full"
+                    />
+                  </Link>
                 </div>
-                <Link to={`/collection/${god.name}`}>
-                  <img src={god.image} alt={god.name} className="max-h-full" />
-                </Link>
               </div>
             </div>
           ))}
