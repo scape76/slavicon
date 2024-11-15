@@ -1,12 +1,21 @@
 import { Header } from "@/components/header";
-import { createFileRoute } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/collection")({
-  component: () => (
-    <div className="overflow-clip">
-      <Header />
-      <Outlet />
-    </div>
-  ),
+  component: () => {
+    const router = useRouter();
+
+    return (
+      <div
+        className={cn("flex flex-col h-screen", {
+          "overflow-hidden": router.state.location.pathname === "/collection",
+        })}
+      >
+        <Header />
+        <Outlet />
+      </div>
+    );
+  },
 });
