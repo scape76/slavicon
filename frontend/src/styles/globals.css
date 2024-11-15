@@ -116,7 +116,7 @@
   }
 
   #app {
-    @apply min-h-screen h-full text-foreground flex flex-col;
+    @apply min-h-dvh h-full text-foreground flex flex-col;
   }
 
   .gradient-border-mask {

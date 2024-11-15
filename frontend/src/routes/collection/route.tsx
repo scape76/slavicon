@@ -9,7 +9,7 @@ export const Route = createFileRoute("/collection")({
 
     return (
       <div
-        className={cn("flex flex-col h-screen", {
+        className={cn("flex flex-col h-dvh", {
           "overflow-hidden": router.state.location.pathname === "/collection",
         })}
       >
