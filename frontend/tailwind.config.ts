@@ -1,5 +1,23 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
 const typography = require("@tailwindcss/typography");
+const plugin = require("tailwindcss/plugin");
+
+const backfaceVisibility = plugin(function ({ addUtilities }) {
+  addUtilities({
+    ".backface-visible": {
+      "backface-visibility": "visible",
+      "-moz-backface-visibility": "visible",
+      "-webkit-backface-visibility": "visible",
+      "-ms-backface-visibility": "visible",
+    },
+    ".backface-hidden": {
+      "backface-visibility": "hidden",
+      "-moz-backface-visibility": "hidden",
+      "-webkit-backface-visibility": "hidden",
+      "-ms-backface-visibility": "hidden",
+    },
+  });
+});
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -137,5 +155,5 @@ module.exports = {
       pulse: "pulse var(--duration) ease-out infinite",
     },
   },
-  plugins: [typography(), require("tailwindcss-animate")],
+  plugins: [typography(), require("tailwindcss-animate"), backfaceVisibility],
 };

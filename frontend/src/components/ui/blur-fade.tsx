@@ -8,6 +8,7 @@ import {
   UseInViewOptions,
   Variants,
 } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 type MarginType = UseInViewOptions["margin"];
 
@@ -58,7 +59,8 @@ export default function BlurFade({
           duration,
           ease: "easeOut",
         }}
-        className={className}
+        /* https://stackoverflow.com/questions/20377990/why-doesnt-blur0-remove-all-text-blur-in-webkit-chrome-on-retina-screens */
+        className={cn(className, "backface-hidden")}
       >
         {children}
       </motion.div>

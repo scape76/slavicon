@@ -10,6 +10,8 @@ import { GodBasic } from "@/routes/collection";
 import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FadeText } from "../ui/fade-text";
+import BlurFade from "../ui/blur-fade";
 
 const TWEEN_SCALE_FACTOR_BASE = 0.35;
 const TWEEN_OPACITY_FACTOR_BASE = 0.6;
@@ -135,7 +137,7 @@ const GodsCarousel: React.FC<PropType> = (props) => {
               className="embla__slide h-full flex-[0_0_100%] sm:flex-[0_0_70%] md:flex-[0_0_65%] lg:flex-[0_0_50%] xl:flex-[0_0_35%]"
               key={god.name + i}
             >
-              <div className="relative">
+              <BlurFade className="relative">
                 <div className="embla__slide__number flex-col items-center text-center h-full relative">
                   <div className="flex flex-col gap-2 absolute top-24 left-[50%] -translate-x-[50%]">
                     <h2 className="text-2xl lg:text-3xl">{god.name}</h2>
@@ -151,38 +153,40 @@ const GodsCarousel: React.FC<PropType> = (props) => {
                     />
                   </Link>
                 </div>
-              </div>
+              </BlurFade>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="embla__controls absolute bottom-24 left-[50%] -translate-x-[46%]">
-        <div className="embla__buttons flex gap-6 items-center">
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={onPrevButtonClick}
-            disabled={prevBtnDisabled}
-          >
-            <ChevronLeft className="size-6" />
-          </Button>
-          <Link
-            to={`/collection/${currentGod}`}
-            className="bg-gradient-to-r from-black/0 via-black/80 to-black/0 shadow-inner px-6 py-2 hover:via-black/50"
-          >
-            Explore
-          </Link>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={onNextButtonClick}
-            disabled={nextBtnDisabled}
-          >
-            <ChevronRight className="size-6" />
-          </Button>
+      <BlurFade delay={0.25}>
+        <div className="embla__controls absolute bottom-24 left-[50%] -translate-x-[46%]">
+          <div className="embla__buttons flex gap-6 items-center">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onPrevButtonClick}
+              disabled={prevBtnDisabled}
+            >
+              <ChevronLeft className="size-6" />
+            </Button>
+            <Link
+              to={`/collection/${currentGod}`}
+              className="bg-gradient-to-r from-black/0 via-black/80 to-black/0 shadow-inner px-6 py-2 hover:via-black/50"
+            >
+              Explore
+            </Link>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onNextButtonClick}
+              disabled={nextBtnDisabled}
+            >
+              <ChevronRight className="size-6" />
+            </Button>
+          </div>
         </div>
-      </div>
+      </BlurFade>
     </div>
   );
 };
