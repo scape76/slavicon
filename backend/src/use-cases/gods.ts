@@ -45,3 +45,15 @@ export async function getGod(name: God["name"]) {
 
   return result;
 }
+
+export async function getGodsCollection() {
+  const result = await db.query.gods.findMany({
+    columns: {
+      image: true,
+      name: true,
+      knownAs: true,
+    },
+  });
+
+  return result;
+}

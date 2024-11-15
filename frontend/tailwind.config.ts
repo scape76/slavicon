@@ -16,13 +16,13 @@ module.exports = {
         "2xl": "1900px",
       },
     },
-    boxShadow: {
-      "white-black": [
-        "-2px -2px 4px rgba(255, 241, 241, 0.05)",
-        "4px 4px 10px 2px rgba(0, 0, 0, 0.7)",
-      ],
-    },
     extend: {
+      boxShadow: {
+        "white-black": [
+          "-2px -2px 4px rgba(255, 241, 241, 0.05)",
+          "4px 4px 10px 2px rgba(0, 0, 0, 0.7)",
+        ],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

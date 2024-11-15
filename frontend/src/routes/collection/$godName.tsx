@@ -76,165 +76,159 @@ export const Route = createFileRoute("/collection/$godName")({
     };
   },
   notFoundComponent: NotFound,
-  component: () => {
-    const god = Route.useLoaderData();
-    const { topic } = Route.useSearch();
+  component: Component,
+});
 
-    const router = useRouter();
+function Component() {
+  const god = Route.useLoaderData();
+  const { topic } = Route.useSearch();
 
-    const isTablet = useMediaQuery("(max-width: 1280px)");
+  const isTablet = useMediaQuery("(max-width: 1280px)");
 
-    return (
-      <section className="container h-[calc(100vh-var(--header-height))] flex flex-col-reverse xl:flex-row gap-4 pb-8 pl-[1.5rem] xl:pr-0">
-        <div className="flex flex-col flex-1 overflow-auto gap-4 xl:w-5/12 rounded-md shadow-white-black gradient-border-mask xl:mb-20">
-          <div className="flex flex-col xl:flex-row xl:items-end justify-between ">
-            <FadeText
-              direction="down"
-              transition={{ delay: 0.2, duration: 0.4 }}
-            >
-              <h1 className="text-3xl font-bold">{god.name}</h1>
-            </FadeText>
-            <FadeText
-              direction="left"
-              transition={{ delay: 0.4, duration: 0.4 }}
-            >
-              <span className="text-lg">{god.knownAs}</span>
-            </FadeText>
-          </div>
-          <hr className="w-1/2 xl:ml-auto border-b border-border" />
-          <ScrollArea className="pr-4">
-            {topic === "info" && <InfoTable information={god.information} />}
-            {topic === "events" && (
-              <Await
-                promise={god.detailsPromise}
-                fallback={
-                  <div className="grid gap-10">
-                    <Skeleton className="w-3/4 h-10" />
-                    <Skeleton className="w-full h-32" />
-                  </div>
-                }
-              >
-                {(source) => <Markdown mdxSource={source} />}
-              </Await>
-            )}
-            {topic === "places" && (
-              <Await
-                promise={god.placesPromise}
-                fallback={
-                  <div className="grid gap-10">
-                    <Skeleton className="w-3/4 h-10" />
-                    <Skeleton className="w-full h-32" />
-                  </div>
-                }
-              >
-                {(source) => <Markdown mdxSource={source} />}
-              </Await>
-            )}
-          </ScrollArea>
+  return (
+    <section className="container h-[calc(100vh-var(--header-height))] flex flex-col-reverse xl:flex-row gap-4 pb-8 pl-[1.5rem] xl:pr-0">
+      <div className="flex flex-col flex-1 overflow-auto gap-4 xl:w-5/12 rounded-md shadow-white-black gradient-border-mask xl:mb-20">
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between ">
+          <FadeText direction="down" transition={{ delay: 0.2, duration: 0.4 }}>
+            <h1 className="text-3xl font-bold">{god.name}</h1>
+          </FadeText>
+          <FadeText direction="left" transition={{ delay: 0.4, duration: 0.4 }}>
+            <span className="text-lg">{god.knownAs}</span>
+          </FadeText>
         </div>
-        {!isTablet && <TopicSwitcher topic={topic} godName={god.name} />}
-        {isTablet && (
-          <div className="pt-[calc(18vh-110px)] sm:pt-[18vh] relative flex items-center justify-between">
-            <TopicSwitcher topic={topic} godName={god.name} />
-            <Switchers className="self-end">
-              <Link
-                from={Route.id}
-                preload={"render"}
-                search={{
-                  topic,
-                }}
-                to={`/collection/${god.prevName}`}
-              >
-                <Switcher />
-              </Link>
-              <Switcher active />
-              <Link
-                from={Route.id}
-                preload={"render"}
-                search={{
-                  topic,
-                }}
-                to={`/collection/${god.nextName}`}
-              >
-                <Switcher />
-              </Link>
-            </Switchers>
-            <BlurFade
-              delay={0.3}
-              yOffset={0}
-              className="absolute h-fit -z-[1] -top-[20vw] sm:-top-[30vw] right-[5%]"
-            >
-              <img
-                src={god.image}
-                alt={god.name}
-                className="ml-auto w-[100%] object-cover translate-x-[28%]"
-              />
-            </BlurFade>
-            <AskBubble className="absolute -top-[8px] right-[350px] hidden lg:flex"></AskBubble>
-            <Link
-              to={"/c"}
-              search={{ godName: god.name }}
-              className="absolute shadow-inner top-0 right-[40%] group lg:hidden"
-            >
-              <AskBubbleSmall>
-                <div className="flex gap-1 items-center">
-                  <p className="text-md text-center w-full">Chat with me</p>
-                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+        <hr className="w-1/2 xl:ml-auto border-b border-border" />
+        <ScrollArea className="pr-4">
+          {topic === "info" && <InfoTable information={god.information} />}
+          {topic === "events" && (
+            <Await
+              promise={god.detailsPromise}
+              fallback={
+                <div className="grid gap-10">
+                  <Skeleton className="w-3/4 h-10" />
+                  <Skeleton className="w-full h-32" />
                 </div>
-              </AskBubbleSmall>
+              }
+            >
+              {(source) => <Markdown mdxSource={source} />}
+            </Await>
+          )}
+          {topic === "places" && (
+            <Await
+              promise={god.placesPromise}
+              fallback={
+                <div className="grid gap-10">
+                  <Skeleton className="w-3/4 h-10" />
+                  <Skeleton className="w-full h-32" />
+                </div>
+              }
+            >
+              {(source) => <Markdown mdxSource={source} />}
+            </Await>
+          )}
+        </ScrollArea>
+      </div>
+      {!isTablet && <TopicSwitcher topic={topic} godName={god.name} />}
+      {isTablet && (
+        <div className="pt-[calc(18vh-110px)] sm:pt-[18vh] relative flex items-center justify-between">
+          <TopicSwitcher topic={topic} godName={god.name} />
+          <Switchers className="self-end">
+            <Link
+              from={Route.id}
+              preload={"render"}
+              search={{
+                topic,
+              }}
+              to={`/collection/${god.prevName}`}
+            >
+              <Switcher />
+            </Link>
+            <Switcher active />
+            <Link
+              from={Route.id}
+              preload={"render"}
+              search={{
+                topic,
+              }}
+              to={`/collection/${god.nextName}`}
+            >
+              <Switcher />
+            </Link>
+          </Switchers>
+          <BlurFade
+            delay={0.3}
+            yOffset={0}
+            className="absolute h-fit -z-[1] -top-[20vw] sm:-top-[30vw] right-[5%]"
+          >
+            <img
+              src={god.image}
+              alt={god.name}
+              className="ml-auto w-[100%] object-cover translate-x-[28%]"
+            />
+          </BlurFade>
+          <AskBubble className="absolute -top-[8px] right-[350px] hidden lg:flex"></AskBubble>
+          <Link
+            to={"/c"}
+            search={{ godName: god.name }}
+            className="absolute shadow-inner top-0 right-[40%] group lg:hidden"
+          >
+            <AskBubbleSmall>
+              <div className="flex gap-1 items-center">
+                <p className="text-md text-center w-full">Chat with me</p>
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </div>
+            </AskBubbleSmall>
+          </Link>
+        </div>
+      )}
+      {!isTablet && (
+        <div className="relative flex-1 justify-center">
+          <BlurFade
+            delay={0.3}
+            yOffset={0}
+            className="flex justify-center absolute -z-[1] bottom-0 h-full xl:h-auto"
+          >
+            <img
+              src={god.image}
+              alt={god.name}
+              className="w-full h-auto object-cover"
+            />
+          </BlurFade>
+          <AskBubble className="absolute -top-[8px] left-2" />
+          <div className="absolute left-[50%] translate-x-[-50%] bottom-[5rem] flex gap-2">
+            <Link
+              from={Route.id}
+              preload={"render"}
+              search={{
+                topic,
+              }}
+              to={`/collection/${god.prevName}`}
+              className={buttonVariants({
+                variant: "ghost",
+                size: "icon",
+              })}
+            >
+              <ChevronLeft />
+            </Link>
+            <Link
+              from={Route.id}
+              search={{
+                topic,
+              }}
+              preload={"render"}
+              to={`/collection/${god.nextName}`}
+              className={buttonVariants({
+                variant: "ghost",
+                size: "icon",
+              })}
+            >
+              <ChevronRight />
             </Link>
           </div>
-        )}
-        {!isTablet && (
-          <div className="relative flex-1 justify-center">
-            <BlurFade
-              delay={0.3}
-              yOffset={0}
-              className="flex justify-center absolute -z-[1] bottom-0 h-full xl:h-auto"
-            >
-              <img
-                src={god.image}
-                alt={god.name}
-                className="w-full h-auto object-cover"
-              />
-            </BlurFade>
-            <AskBubble className="absolute -top-[8px] left-2" />
-            <div className="absolute left-[50%] translate-x-[-50%] bottom-[5rem] flex gap-2">
-              <Link
-                from={Route.id}
-                preload={"render"}
-                search={{
-                  topic,
-                }}
-                to={`/collection/${god.prevName}`}
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "icon",
-                })}
-              >
-                <ChevronLeft />
-              </Link>
-              <Link
-                from={Route.id}
-                search={{
-                  topic,
-                }}
-                preload={"render"}
-                to={`/collection/${god.nextName}`}
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "icon",
-                })}
-              >
-                <ChevronRight />
-              </Link>
-            </div>
-          </div>
-        )}
-      </section>
-    );
-  },
-});
+        </div>
+      )}
+    </section>
+  );
+}
 
 function AskBubbleSmall({
   className,

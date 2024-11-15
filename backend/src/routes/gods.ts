@@ -1,7 +1,13 @@
 import { Hono } from "hono";
-import { getGod } from "../use-cases/gods";
+import { getGod, getGodsCollection } from "../use-cases/gods";
 
 const godsRouter = new Hono();
+
+godsRouter.get("/collection", async (c) => {
+  const gods = await getGodsCollection();
+
+  return c.json({ data: gods }, 200);
+});
 
 godsRouter.get("/:name", async (c) => {
   const name = c.req.param("name");
