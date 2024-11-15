@@ -5,9 +5,9 @@ import {
   EmblaOptionsType,
 } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import { NextButton, PrevButton, usePrevNextButtons } from "./carousel-button";
+import { usePrevNextButtons } from "./carousel-button";
 import { GodBasic } from "@/routes/collection";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -99,7 +99,6 @@ const GodsCarousel: React.FC<PropType> = (props) => {
             0,
             DEFAULT_SCALE
           ).toString();
-          console.log("scale", scale);
           const opacity = numberWithinRange(tweenOpacityValue, 0, 1);
 
           const tweenNode = tweenNodes.current[slideIndex];
