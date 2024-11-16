@@ -72,5 +72,31 @@
       }
     },
     "places": "## Dazhbog: The Slavic God of the Sun and Prosperity\n\n  <Place float='left' image={'/dazhbog/dazhbog.webp'}>\n    **Dazhbog** (also spelled Dazhdbog) is a prominent deity in Slavic mythology, often associated with the sun, wealth, and abundance. Known as the **God of the Sun**, Dazhbog is believed to bring prosperity, fertility, and light to the world, embodying the warmth and life-giving energy of the sun. In some interpretations, he is thought to be a cultural hero, spreading blessings and good fortune across the land.\n\n    As one of the few gods directly linked to the sun in Slavic pantheon, **Dazhbog** played a central role in the daily lives and beliefs of ancient Slavs. Some sources describe him as a **\"giver god\"** who generously bestows wealth and power, while others view him as a cosmic guardian, ensuring the continuation of life and growth.\n  </Place>\n\n  ### The Legacy of Dazhbog\n\n  In Slavic folklore, **Dazhbog** is often referred to as a divine ancestor of the Slavic people, and some medieval sources even call him the father of the Slavs. His presence is linked to the daily sunrise and sunset, symbolizing the cycles of life, death, and renewal. This connection to natural cycles made Dazhbog a figure of reverence, especially among farmers and communities relying on the rhythms of nature for survival.\n\n  Dazhbog’s influence extended beyond just mythology; he was often invoked in prayers and rituals to ensure bountiful harvests, warm weather, and general prosperity. The legacy of Dazhbog remains a testament to the ancient Slavs' deep respect for the sun and its critical role in sustaining life."
+  },
+  {
+    "name": "Rod",
+    "knownAs": "God of Family, Ancestors, and Fate",
+    "image": "/rod/rod-main.webp",
+    "avatar": "/rod/ava.webp",
+    "description": "# Rod — God of Family, Ancestors, and Fate\n\n## Role and Attributes\nRod is the primordial deity in Slavic mythology, revered as the creator of life and the protector of family, ancestry, and fate. He is considered the source of all life and the keeper of the divine order, ensuring harmony between the living and their ancestors.\n\n- **Domains**: family, ancestors, creation, and fate\n- **Patron of**: families, kinship, and tradition\n\n## Symbols and Festivals\nRod is celebrated during the **Festival of Rod and Rozhanitsy**, a time to honor ancestors and seek blessings for family and fate.\n\n- **Symbol**: birch tree, representing life, renewal, and connection to the ancestors\n- **Animals**: rooster and crane, symbolizing vigilance and the link between worlds\n\n## Mythological Parallels\nHis equivalents in other mythologies are:\n\n- **Ancestral spirits (Manes)** in Roman mythology\n- **Uranus and Ananke** in Greek mythology\n\n## Fun Facts\nRod is often accompanied by the Rozhanitsy, female deities associated with childbirth and destiny. Together, they represent the sacred bond between generations and the intertwining threads of fate.",
+    "information": {
+      "rod": {
+        "godOf": "family, ancestors, creation, fate, and divine order",
+        "abode": "connection between the mortal world and the divine",
+        "weapon": "none (symbol of peace and harmony)",
+        "battles": "none (primordial and neutral deity)",
+        "animals": "rooster, crane",
+        "symbol": "birch tree",
+        "festivals": "festival of rod and rozhanitsy"
+      },
+      "equivalents": {
+        "roman": "manes",
+        "greek": "uranus, ananke",
+        "indoeuropean": "creator deity (dyēus)",
+        "norse": "urd (fate), ancestral spirits",
+        "hindu": "pitra (ancestors)"
+      }
+    },
+    "places": "## Rod: The Primordial Creator and Keeper of Kinship\n\n  <Place float='left' image={'/rod/rod.webp'}>\n    **Rod** holds a unique position in Slavic mythology as the progenitor of all life and the protector of familial bonds. In ancient Slavic belief, Rod is not only the god of creation but also the overseer of the ties that bind the living to their ancestors. Worship of Rod often took place at the family hearth or sacred groves, emphasizing his close connection to everyday life.\n\n    The Rozhanitsy, often linked to Rod, are viewed as divine mothers or fate-weavers, underscoring the communal and familial focus of Slavic spirituality. During the **Festival of Rod and Rozhanitsy**, offerings of bread, honey, and milk were made to seek protection, prosperity, and harmony in the family.\n  </Place>\n\n  ### Etymology and Symbolism of Rod\n\n  <Place float='right' image={'/rod/family-symbol.jpg'}>\n    The name **Rod** is derived from the Proto-Slavic root *rodъ*, meaning \"birth,\" \"kinship,\" or \"lineage.\" This highlights Rod's fundamental role as the god of origin and the sustainer of life. The birch tree, sacred to Rod, symbolizes purity, new beginnings, and the continuity of life through generations.\n\n    In Slavic cosmology, Rod is seen as the force that unites the living and the dead, ensuring that the bonds of kinship endure beyond the mortal realm. The rooster, another symbol of Rod, represents vigilance and the passage of time, heralding the continuity of life.\n  </Place>\n\n  ### Cultural Impact and Worship Practices\n\n  Worship of Rod was deeply personal and centered around the family unit. Unlike other deities who had large public shrines, Rod was often honored at the hearth, where offerings were made to ensure family prosperity and to honor the ancestors. This intimate form of worship reflects the significance of kinship and tradition in Slavic culture.\n\n  The Festival of Rod and Rozhanitsy is one of the most heartfelt celebrations in Slavic traditions, symbolizing the cyclical nature of life and the unbreakable connection between past, present, and future generations."
   }
 ]

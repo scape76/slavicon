@@ -16,5 +16,5 @@ export function getBaseUrl() {
 }
 
 export function getGodAvatar(name: string) {
-  return `${name.toLowerCase()}/ava.webp`;
+  return `/${name.toLowerCase()}/ava.webp`;
 }

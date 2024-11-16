@@ -134,7 +134,6 @@ chatsRouter.post("/:id", async (c) => {
       if (done || !value) break;
 
       const text = decoder.decode(value);
-      console.log("value is ", text);
       buffer += text;
       await stream.write(text);
     }

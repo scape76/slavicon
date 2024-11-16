@@ -28,4 +28,4 @@ function CollectionComponent() {
   );
 }
 
-const minifiedKnownAs = (ka: string) => ka.split("and")[0];
+const minifiedKnownAs = (ka: string) => ka.split("and")[0].split(',')[0];

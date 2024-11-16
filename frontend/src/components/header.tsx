@@ -17,8 +17,6 @@ export function Header({ toggleSidebar, className }: HeaderProps) {
 
   const router = useRouter();
 
-  console.log(router.state.location.href);
-
   return (
     <header
       className={cn(

@@ -23,12 +23,12 @@ type Chat = {
   updatedAt: string;
 };
 
-export type GodName = "veles" | "perun" | "dazhbog";
+export type GodName = "veles" | "perun" | "dazhbog" | "rod";
 
 function isGodName(n: unknown): n is GodName {
   return (
     typeof n === "string" &&
-    ["veles", "perun", "dazhbog"].includes(n.toLowerCase())
+    ["veles", "perun", "dazhbog", "rod"].includes(n.toLowerCase())
   );
 }
 

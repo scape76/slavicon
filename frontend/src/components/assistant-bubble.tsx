@@ -19,7 +19,11 @@ export const AssistantBubble = React.forwardRef<
   ref
 ) {
   return (
-    <div ref={ref} className={cn("flex flex-1 gap-4", className)} {...props}>
+    <div
+      ref={ref}
+      className={cn("flex flex-col flex-1 gap-4", className)}
+      {...props}
+    >
       <div className="flex-shrink-0 flex flex-col relative items-end">
         <div className="pt-0">
           <div className="size-12 flex items-center justify-center rounded-full border">
