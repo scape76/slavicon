@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { AssistantBubble } from "./assistant-bubble";
+import { God } from "@/types";
 
 interface Message {
   body: string;
@@ -7,6 +8,7 @@ interface Message {
 }
 
 interface MessageListProps {
+  godInfo: Pick<God, "name" | "avatar">;
   messages: Message[];
   latestAnswer?: {
     body: string;
@@ -16,6 +18,7 @@ interface MessageListProps {
 }
 
 export function MessageList({
+  godInfo,
   messages,
   latestAnswer,
   lastMessageRef,
@@ -31,6 +34,7 @@ export function MessageList({
               className="self-start"
               message={message.body}
               isFinished={true}
+              godInfo={godInfo}
               ref={isLast ? lastMessageRef : undefined}
             />
           );
@@ -51,6 +55,7 @@ export function MessageList({
       {latestAnswer && (
         <AssistantBubble
           className="self-start"
+          godInfo={godInfo}
           message={latestAnswer.body}
           isFinished={latestAnswer.isFinished}
           ref={lastMessageRef}

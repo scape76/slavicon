@@ -13,6 +13,7 @@ export type God = {
   description: string;
   information: GodInfo;
   image: string;
+  avatar: string;
   places: string;
 };
 

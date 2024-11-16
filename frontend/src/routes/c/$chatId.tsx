@@ -3,7 +3,7 @@ import { MessageList } from "@/components/message-list";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, getGodAvatar } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ChevronLeft, Send } from "lucide-react";
@@ -18,6 +18,7 @@ type Chat = {
   id: string;
   name: string;
   messages: Message[];
+  godName: string;
 };
 
 export const Route = createFileRoute("/c/$chatId")({
@@ -114,6 +115,10 @@ function Chat() {
         >
           <div className="pb-9">
             <MessageList
+              godInfo={{
+                avatar: getGodAvatar(data.godName),
+                name: data.godName,
+              }}
               messages={[...data.messages, ...messages]}
               latestAnswer={
                 answer ? { body: answer, isFinished: finished } : undefined

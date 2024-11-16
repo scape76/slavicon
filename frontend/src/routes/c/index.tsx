@@ -2,7 +2,12 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import { Await, createFileRoute, useRouter } from "@tanstack/react-router";
+import {
+  Await,
+  createFileRoute,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 import { Loader2, MessageSquarePlus, Send } from "lucide-react";
 import { useState } from "react";
 import { MessageList } from "@/components/message-list";
@@ -10,6 +15,7 @@ import { MessageInput } from "@/components/message-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/lib/api";
 import { Route as IndexRoute } from "../__root";
+import { getGodAvatar } from "@/lib/utils";
 
 type Chat = {
   id: string;
@@ -48,6 +54,8 @@ function Chat() {
   const [finished, setFinished] = useState(false);
   const [assistantMessage, setAssistantMessage] = useState<null | string>(null);
 
+  const { godName } = Route.useSearch();
+
   const router = useRouter();
 
   const { isPending, mutate } = useMutation({
@@ -61,15 +69,12 @@ function Chat() {
       //   body: JSON.stringify({ message, godName: "Veles" }),
       // });
 
-      console.log("sending response !");
       const response = await api.post("chats", {
         body: JSON.stringify({
           message,
-          godName: "Veles",
+          godName,
         }),
       });
-
-      console.log("status is ", response.statusText);
 
       if (response.status === 403) {
         router.navigate({
@@ -87,16 +92,15 @@ function Chat() {
       while (true) {
         const { done, value } = (await reader?.read()) ?? {};
         if (done) break;
+
         const text = decoder.decode(value ?? new Uint8Array(), {
           stream: true,
         });
-        const body = text.slice(1);
-        // we got back llm's response
-        if (text.startsWith("r")) {
-          setAssistantMessage((prev) => (prev ? prev + body : body));
-        } else if (text.startsWith("c")) {
-          // we got back the chat id
-          return body;
+
+        if (text.startsWith("###CHATID")) {
+          return text.slice(9);
+        } else {
+          setAssistantMessage((prev) => (prev ? prev + text : text));
         }
       }
     },
@@ -210,6 +214,8 @@ function FakeRoom({
   response: string;
   finished: boolean;
 }) {
+  const { godName } = Route.useSearch();
+
   return (
     <div className="mx-4 h-full flex flex-col">
       <div className="relative w-full max-w-5xl mx-auto gap-4 h-full flex-1 flex flex-col">
@@ -219,6 +225,10 @@ function FakeRoom({
         >
           <div className="pb-9">
             <MessageList
+              godInfo={{
+                name: godName,
+                avatar: getGodAvatar(godName),
+              }}
               messages={[{ body: message, from: "user" }]}
               latestAnswer={{ body: response, isFinished: finished }}
             />

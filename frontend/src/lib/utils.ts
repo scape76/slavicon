@@ -14,3 +14,7 @@ export function getBaseUrl() {
   if (import.meta.env.DEV) return "http://localhost:3001";
   throw new Error("API URL not defined!");
 }
+
+export function getGodAvatar(name: string) {
+  return `${name.toLowerCase()}/ava.webp`;
+}

@@ -61,7 +61,7 @@ chatsRouter.post("/", async (c) => {
 
     const chatId = data.chat.id;
 
-    const streamData = await ask(message);
+    const streamData = await ask(message, [], data.chat.godName);
     const reader = streamData?.getReader();
 
     if (!reader) {
@@ -69,28 +69,15 @@ chatsRouter.post("/", async (c) => {
     }
 
     const decoder = new TextDecoder();
-
     let buffer = "";
     while (true) {
       const { done, value } = await reader.read();
 
       if (done || !value) break;
+      const text = decoder.decode(value);
 
-      const json = decoder.decode(value, { stream: true });
-
-      for (const line of json.split("\n")) {
-        if (line.trim() === "") continue;
-
-        console.log("line is ", line);
-        const body = JSON.parse(line);
-
-        const text = body.message.content;
-
-        buffer += text;
-
-        await stream.write("r" + text);
-        await new Promise((resolve) => setTimeout(resolve, 200));
-      }
+      buffer += text;
+      await stream.write(text);
     }
 
     await saveMessage(chatId, buffer, "assistant");
@@ -102,7 +89,7 @@ chatsRouter.post("/", async (c) => {
 
     await updateChatName(chatId, chatName ?? "Untitled");
 
-    await stream.write("c" + chatId);
+    await stream.write("###CHATID" + chatId);
 
     await stream.close();
   });
@@ -132,7 +119,7 @@ chatsRouter.post("/:id", async (c) => {
   await saveMessage(chatId, message, "user");
 
   return streamText(c, async (stream) => {
-    const streamData = await ask(message, chat.messages);
+    const streamData = await ask(message, chat.messages, chat.godName);
     const reader = streamData?.getReader();
 
     if (!reader) {
@@ -140,26 +127,16 @@ chatsRouter.post("/:id", async (c) => {
     }
 
     const decoder = new TextDecoder();
-
     let buffer = "";
     while (true) {
       const { done, value } = await reader.read();
 
-      if (done) break;
+      if (done || !value) break;
 
-      const json = decoder.decode(value ?? new Uint8Array(), { stream: true });
-
-      for (const line of json.split("\n")) {
-        if (line.trim() === "") continue;
-
-        const body = JSON.parse(line);
-
-        const text = body.message.content;
-        buffer += text;
-
-        await stream.write(text);
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
+      const text = decoder.decode(value);
+      console.log("value is ", text);
+      buffer += text;
+      await stream.write(text);
     }
 
     await saveMessage(chatId, buffer, "assistant");

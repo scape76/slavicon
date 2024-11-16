@@ -10,6 +10,7 @@ export const gods = createTable("god", {
   description: text("description").notNull(),
   information: json("information").$type<GodInfo>().notNull(),
   image: text("image").notNull(),
+  avatar: text("avatar").notNull(),
   // markdown
   places: text("places").notNull(),
 });

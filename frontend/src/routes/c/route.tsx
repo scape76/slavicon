@@ -25,7 +25,6 @@ import {
 } from "@tanstack/react-router";
 import { isYesterday } from "date-fns";
 import { isToday } from "date-fns";
-import ky from "ky";
 import { ChevronLeft, MessageSquarePlus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -55,10 +54,10 @@ export const Route = createFileRoute("/c")({
 
 function Layout() {
   return (
-    <div className="flex-1 flex flex-col bg-[url('/background/background-chat.png')] bg-no-repeat bg-cover bg-[-40vw_center] md:bg-[center_center]  xl:bg-cover">
+    <div className="flex-1 flex flex-col bg-[url('/background/background-chat.png')] bg-fixed bg-no-repeat bg-cover bg-[-40vw_center] md:bg-[center_center]  xl:bg-cover">
       <SidebarProvider>
         <ChatsSidebar />
-        <main className="relative w-full h-dvh flex flex-col">
+        <main className="relative w-full min-h-dvh flex flex-col">
           <Header
             toggleSidebar={<HeaderToggleSidebar />}
             className="sticky top-0 bg-[#04090C80] z-20"
@@ -119,6 +118,9 @@ function ChatsSidebar() {
           onClick={() => {
             router.navigate({
               to: "/c",
+              search: {
+                godName: "veles",
+              },
             });
           }}
         >
