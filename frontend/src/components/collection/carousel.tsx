@@ -99,7 +99,7 @@ const GodsCarousel: React.FC<PropType> = (props) => {
           const scale = numberWithinRange(
             tweenScaleValue,
             0,
-            DEFAULT_SCALE
+            DEFAULT_SCALE,
           ).toString();
           const opacity = numberWithinRange(tweenOpacityValue, 0, 1);
 
@@ -109,7 +109,7 @@ const GodsCarousel: React.FC<PropType> = (props) => {
         });
       });
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const GodsCarousel: React.FC<PropType> = (props) => {
     <div className="embla flex-1 relative">
       <div className="embla__viewport h-full pb-10" ref={emblaRef}>
         <div className="embla__container h-full">
-          {[...collection, ...collection].map((god, i) => (
+          {collection.map((god, i) => (
             <div
               className="embla__slide h-full flex-[0_0_100%] sm:flex-[0_0_70%] md:flex-[0_0_65%] lg:flex-[0_0_50%] xl:flex-[0_0_35%]"
               key={god.name + i}
