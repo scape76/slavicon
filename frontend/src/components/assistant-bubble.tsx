@@ -1,9 +1,9 @@
 import React from "react";
-import { Cat, Circle, FeatherIcon } from "lucide-react";
+import { Feather } from "lucide-react";
 import { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
-import ReactMarkdown from "react-markdown";
 import { God } from "@/types";
+import ReactMarkdown from "markdown-to-jsx";
 
 interface AssistantBubbleProps extends ComponentPropsWithoutRef<"div"> {
   godInfo: Pick<God, "name" | "avatar">;
@@ -16,7 +16,7 @@ export const AssistantBubble = React.forwardRef<
   AssistantBubbleProps
 >(function AssistantBubble(
   { message, godInfo, isFinished = false, className, ...props },
-  ref
+  ref,
 ) {
   return (
     <div
@@ -34,12 +34,28 @@ export const AssistantBubble = React.forwardRef<
       <div
         className={cn(
           "self-end p-4 rounded-lg bg-[#04090C80] max-w-full md:max-w-[70%] xl:max-w-full border border-[#FC0FC01A]",
-          className
+          className,
         )}
         {...props}
       >
         <ReactMarkdown
           className={"prose dark:prose-invert prose-md text-foreground"}
+          options={{
+            overrides: {
+              span: {
+                component: ({ children, ...props }) => {
+                  return (
+                    <span {...props} className={"group"}>
+                      {children}
+                      {!isFinished && (
+                        <Feather className="size-4 text-primary animate-pulse hidden group-[:last-of-type]:inline-block" />
+                      )}
+                    </span>
+                  );
+                },
+              },
+            },
+          }}
         >
           {message}
         </ReactMarkdown>

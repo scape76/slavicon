@@ -182,6 +182,7 @@ function InputRoom({
                       }
                     }
                   }}
+                  className="pr-12"
                 />
                 <Button
                   variant="ghost"
