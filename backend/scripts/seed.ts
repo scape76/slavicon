@@ -3,6 +3,7 @@ import { gods } from "../src/db/schema";
 import cozyGods from "./gods.json";
 
 export const seed = async () => {
+  await db.delete(gods);
   const result = await db.insert(gods).values(cozyGods);
   return result.rowCount;
 };
