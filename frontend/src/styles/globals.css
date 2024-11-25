@@ -18,8 +18,8 @@
   --card: 0 0% 100%;
   --card-foreground: 240 10% 3.9%;
 
-  --primary: 315 98% 52%;
-  --primary-foreground: 0 0% 98%;
+  --primary: 45 93% 47%; /* Changed to golden yellow */
+  --primary-foreground: 0 0% 98%; /* Kept light to ensure contrast */
 
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
@@ -72,8 +72,11 @@
   --card: 240 10% 3.9%;
   --card-foreground: 0 0% 98%;
 
-  --primary: 315 98% 52%;
-  --primary-foreground: 240 5.9% 10%;
+  /* --primary: 315 98% 52%;
+  --primary-foreground: 240 5.9% 10%; */
+
+  --primary: 45 93% 47%; /* Same golden yellow for consistency */
+  --primary-foreground: 240 5.9% 10%; /* Dark text for contrast */
 
   --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
@@ -111,6 +114,10 @@
     scroll-behavior: smooth;
   }
 
+  * {
+    border-color: hsl(var(--primary)) !important;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -125,7 +132,7 @@
     backdrop-filter: blur(3px);
   }
 
-  .gradient-border-mask::before {
+  gradient-border-mask::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -133,8 +140,8 @@
     border: 1px solid transparent;
     background: linear-gradient(
         150deg,
-        rgba(252, 15, 192, 0) 14%,
-        rgba(150, 9, 115, 0.774) 100%
+        rgba(255, 196, 0, 0) 14%,
+        rgba(184, 142, 0, 0.774) 100%
       )
       border-box;
     mask:

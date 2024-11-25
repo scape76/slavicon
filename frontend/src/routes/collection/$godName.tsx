@@ -97,7 +97,7 @@ function Component() {
             <span className="text-lg">{god.knownAs}</span>
           </FadeText>
         </div>
-        <hr className="w-1/2 xl:ml-auto border-b border-border" />
+        <hr className="w-1/2 xl:ml-auto border-b border-primary" />
         <ScrollArea className="pr-4">
           {topic === "info" && <InfoTable information={god.information} />}
           {topic === "events" && (
@@ -245,7 +245,7 @@ function AskBubbleSmall({
         // "after:border-[10px] after:border-solid",
         // "after:border-r-background after:border-t-background",
         // "after:border-b-transparent after:border-l-transparent",
-        className
+        className,
       )}
       style={
         {
@@ -268,7 +268,7 @@ function AskBubble({ className }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "bg-[url('/background/question.png')] flex flex-col bg-no-repeat pl-2 pr-7 lg:pt-7 w-[300px] h-[160px] lg:w-[342px] items-center gap-4 lg:h-[208px]  bg-contain",
-        className
+        className,
       )}
     >
       <FadeText direction="left" transition={{ delay: 0.4, duration: 0.4 }}>
